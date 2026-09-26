@@ -325,8 +325,13 @@ function memoryPrefix(pou: Block | undefined, section: Block): { prefix: string;
     }
 }
 
+/** `state_old` -> `StateOld` (CamelCase suggestion part of a name). */
 function capitalise(name: string): string {
-    return name.length ? name[0].toUpperCase() + name.slice(1) : name;
+    return name
+        .split('_')
+        .filter((p) => p.length > 0)
+        .map((p) => p[0].toUpperCase() + p.slice(1))
+        .join('');
 }
 
 const variablePrefix: Rule = (ctx) => {

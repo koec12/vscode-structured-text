@@ -4,7 +4,7 @@
  * Tolerant of incomplete code: unmatched END_ keywords are ignored and
  * unclosed blocks end at the last token.
  */
-import { CONTROL_OPENERS, isVarKeyword, POU_HEADS } from './analysis';
+import { CONTROL_OPENERS, isPouHead, isVarKeyword, POU_HEADS } from './analysis';
 import type { Dialect } from './dialect';
 import { isNonCode, type Token, upper } from './lexer';
 
@@ -113,7 +113,7 @@ export function parseStructure(tokens: Token[], dialect: Dialect): Block {
             continue;
         }
 
-        if (POU_HEADS.has(u) && (!prev || prev.line < t.line || (prev.kind === 'op' && prev.text === ';') || upper(prev).startsWith('END_'))) {
+        if (POU_HEADS.has(u) && isPouHead(prev, t)) {
             const block = open({ kind: 'pou', keyword: u, start: t });
             let j = k + 1;
             while (ACCESS_MODIFIERS.has(upper(code[j]))) {

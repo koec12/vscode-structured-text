@@ -449,7 +449,8 @@
     "test": "vitest run",
     "test:grammar": "vscode-tmgrammar-test \"test/grammar/**/*.st\" \"test/grammar/**/*.scl\"",
     "package": "vsce package",
-    "vscode:prepublish": "npm run build"
+    "vscode:prepublish": "npm run build",
+    "fmt": "tsx scripts/fmt-cli.ts"
   },
   "devDependencies": {
     "@types/node": "^22.20.4",

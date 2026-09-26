@@ -133,7 +133,7 @@ export function analyze(tokens: Token[], dialect: Dialect): Analysis {
     return { code, codePos, inDecl, labelColons, labelStarts, caseOfs, afterDot };
 }
 
-function isPouHead(prev: Token | undefined, t: Token): boolean {
+export function isPouHead(prev: Token | undefined, t: Token): boolean {
     return !prev || prev.line < t.line || (prev.kind === 'op' && prev.text === ';') || (prev.kind === 'word' && prev.text.toUpperCase().startsWith('END_'));
 }
 
@@ -193,6 +193,5 @@ export function isPouHeadAt(tokens: Token[], a: Analysis, i: number): boolean {
     if (t.kind !== 'word' || !POU_HEADS.has(t.text.toUpperCase()) || a.afterDot[i]) {
         return false;
     }
-    const p = a.codePos[i] > 0 ? tokens[a.code[a.codePos[i] - 1]] : undefined;
-    return !p || p.line < t.line || (p.kind === 'op' && p.text === ';') || (p.kind === 'word' && p.text.toUpperCase().startsWith('END_'));
+    return isPouHead(a.codePos[i] > 0 ? tokens[a.code[a.codePos[i] - 1]] : undefined, t);
 }

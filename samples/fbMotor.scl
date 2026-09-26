@@ -1,0 +1,35 @@
+FUNCTION_BLOCK "fbMotor"
+TITLE = Motor control
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : Sign
+FAMILY : Motors
+VERSION : 0.1
+   VAR_INPUT
+      ixStart : Bool;   // Start command
+      ixStop : Bool;   // Stop command
+      iltDelay : LTime := LT#5s;   // Start delay
+   END_VAR
+   VAR_OUTPUT
+      qxRun : Bool;   // Run output
+   END_VAR
+   VAR
+      sTimer {InstructionName := 'TON_LTIME'; LibVersion := '1.0'} : TON_LTIME;
+      sxRunning : Bool;
+   END_VAR
+   VAR_TEMP
+      txStart : Bool;
+   END_VAR
+BEGIN
+REGION Handle inputs
+#txStart := #ixStart AND NOT #ixStop; IF #ixStop THEN #sxRunning := FALSE; END_IF;
+END_REGION
+REGION Start delay
+#sTimer(IN := #txStart,
+PT := #iltDelay);
+IF #sTimer.Q THEN #sxRunning := TRUE; END_IF;
+END_REGION
+REGION Write to outputs
+#qxRun := #sxRunning;
+"gDbPlant".bMotorRunning := #sxRunning AND %I0.0;
+END_REGION
+END_FUNCTION_BLOCK
