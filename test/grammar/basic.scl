@@ -1,0 +1,41 @@
+// SYNTAX TEST "source.siemens-scl" "Siemens SCL constructs"
+FUNCTION_BLOCK "fbMotor"
+// <------------- storage.type.pou.scl
+//             ^^^^^^^^^ entity.name.function.scl
+TITLE = Motor's control block
+// <----- keyword.other.attribute.scl
+//      ^^^^^^^^^^^^^^^^^^^^^ string.unquoted.title.scl
+{ S7_Optimized_Access := 'TRUE' }
+// <--------------------------------- meta.preprocessor.scl
+VERSION : 0.1
+// <------- keyword.other.attribute.scl
+   VAR_INPUT
+// ^^^^^^^^^ storage.modifier.var.scl
+      ixStart : Bool;
+//              ^^^^ support.type.primitive.scl
+      sTimer : IEC_TIMER;
+//             ^^^^^^^^^ support.type.primitive.scl
+   END_VAR
+BEGIN
+// <----- storage.type.pou.scl
+REGION Handle IF logic
+// <------ keyword.other.region.scl
+//     ^^^^^^^^^^^^^^^ entity.name.section.region.scl
+    #tiCount := #tiCount + 1;
+//  ^ punctuation.definition.variable.scl
+//   ^^^^^^^ variable.other.local.scl
+    "gDb".bRun := #"quoted local";
+//  ^^^^^ variable.other.global.scl
+//                 ^^^^^^^^^^^^^^ variable.other.local.scl
+    #t := S5T#10s + T#1s;
+//        ^^^^^^^ constant.numeric.time.scl
+    #w := W#16#FFFF;
+//        ^ support.type.literal-prefix.scl
+    #y := SCALE_X(MIN := 0.0, VALUE := #x, MAX := 100.0);
+//        ^^^^^^^ support.function.builtin.scl
+    #b := %I0.0 OR %DB1.DBX0.1;
+//        ^^^^^ variable.language.address.scl
+//                 ^^^^^^^^^^^ variable.language.address.scl
+END_REGION
+// <---------- keyword.other.region.scl
+END_FUNCTION_BLOCK
