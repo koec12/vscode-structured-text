@@ -1,6 +1,6 @@
 import type { CaseStyle } from '../language/keywords';
 
-export type CallStyle = 'guideline' | 'guideline-always' | 'preserve';
+export type CallStyle = 'multiline' | 'always' | 'preserve';
 
 export interface FormatOptions {
     /** One indentation level, e.g. four spaces or a tab. */
@@ -34,7 +34,7 @@ export const DEFAULT_FORMAT_OPTIONS: FormatOptions = {
     declarationKeywordCase: 'upper',
     dataTypeCase: 'pascal',
     builtinFunctionCase: 'pascal',
-    booleanLiteralCase: 'lower',
+    booleanLiteralCase: 'pascal',
     indentPouBody: false,
     splitStatements: true,
     alignAssignments: true,
@@ -46,6 +46,6 @@ export const DEFAULT_FORMAT_OPTIONS: FormatOptions = {
     blankLineBetweenVarSections: true,
     reorderVarSections: false,
     maxBlankLines: 1,
-    callStyle: 'guideline',
+    callStyle: 'multiline',
     callExpandMinArgs: 3,
 };

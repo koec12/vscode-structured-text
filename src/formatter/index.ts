@@ -1,5 +1,5 @@
 /**
- * Structured Text / SCL formatter implementing the programming guideline
+ * Structured Text / SCL formatter
  * (see README for the rule list). Pure - no VS Code dependencies.
  */
 import { analyze } from '../language/analysis';

@@ -18,6 +18,17 @@ export function lintEnabled(document: vscode.TextDocument): boolean {
     return section(document).get<boolean>('lint.enable', true);
 }
 
+/** Accepts the setting values of version 0.1.0 ('guideline', 'guideline-always'). */
+function normaliseCallStyle(value: string): FormatOptions['callStyle'] {
+    if (value === 'guideline') {
+        return 'multiline';
+    }
+    if (value === 'guideline-always') {
+        return 'always';
+    }
+    return value === 'always' || value === 'preserve' ? value : 'multiline';
+}
+
 export function formatOptions(document: vscode.TextDocument, editor: vscode.FormattingOptions): FormatOptions {
     const c = section(document);
     const d = DEFAULT_FORMAT_OPTIONS;
@@ -41,7 +52,7 @@ export function formatOptions(document: vscode.TextDocument, editor: vscode.Form
         blankLineBetweenVarSections: get('blankLineBetweenVarSections'),
         reorderVarSections: get('reorderVarSections'),
         maxBlankLines: get('maxBlankLines'),
-        callStyle: get('callStyle'),
+        callStyle: normaliseCallStyle(get('callStyle')),
         callExpandMinArgs: get('callExpandMinArgs'),
     };
 }

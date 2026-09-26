@@ -1,5 +1,5 @@
 /**
- * Keyword / type / built-in casing (guideline 4.1.1.2 "Keywords" and 4.1.1.2.2).
+ * Keyword / type / built-in casing.
  * Shared with the linter's `keyword-case` rule.
  */
 import type { Analysis } from '../language/analysis';
@@ -14,6 +14,9 @@ export interface CaseOptions {
     builtinFunctionCase: CaseStyle;
     booleanLiteralCase: CaseStyle;
 }
+
+/** Type definition words cased like data types (Array[1..10] Of Int, Pointer To tData). */
+const TYPE_CONSTRUCTORS = new Set(['ARRAY', 'POINTER', 'REFERENCE']);
 
 export function styleFor(group: CaseGroup, o: CaseOptions): CaseStyle {
     switch (group) {
@@ -42,8 +45,12 @@ export function caseGroupOf(tokens: Token[], i: number, a: Analysis, dialect: Di
     const next = ci >= 0 ? tokens[a.code[ci + 1]] : undefined;
     const nextText = next?.kind === 'op' ? next.text : '';
 
+    if ((u === 'OF' || u === 'TO') && a.inDecl[i]) {
+        // part of a type definition: ARRAY[..] OF, POINTER TO, REFERENCE TO
+        return 'type';
+    }
     if (sets.control.has(u) || sets.operators.has(u)) {
-        return (u === 'OF' || u === 'TO') && a.inDecl[i] ? 'declaration' : 'keyword';
+        return 'keyword';
     }
     if (sets.pou.has(u) || sets.vars.has(u)) {
         return 'declaration';
@@ -56,6 +63,9 @@ export function caseGroupOf(tokens: Token[], i: number, a: Analysis, dialect: Di
     const typePosition = (prev?.kind === 'op' && prev.text === ':') || (prev?.kind === 'word' && /^(OF|TO)$/i.test(prev.text));
     if (!typePosition && (nextText === ':' || nextText === ':=' || nextText === '=>' || (nextText === ',' && a.inDecl[i]))) {
         return undefined;
+    }
+    if (TYPE_CONSTRUCTORS.has(u)) {
+        return 'type';
     }
     if (sets.modifiers.has(u)) {
         return a.inDecl[i] ? 'declaration' : undefined;

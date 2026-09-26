@@ -69,7 +69,7 @@ End_If;
 //Handle Min/Max cycle time
 If (tltRuntime > sltRuntimeMax) Then
     sltRuntimeMax                       := tltRuntime;
-ElsIf (tltRuntime < sltRuntimeMin) Then
+Elsif (tltRuntime < sltRuntimeMin) Then
     sltRuntimeMin                       := tltRuntime;
 End_If;
 tliJitter                               := (LTime_To_LInt(tltRuntime) - sliJitter) / cliNsPerUs;

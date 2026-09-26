@@ -1,5 +1,5 @@
 /**
- * Programming-guideline lint. Pure - no VS Code dependencies.
+ * Structured Text / SCL lint. Pure - no VS Code dependencies.
  */
 import { analyze } from '../language/analysis';
 import type { Dialect } from '../language/dialect';

@@ -17,5 +17,5 @@ END_TYPE
 
 TYPE eColor : (Red := 0, Green, Blue);
 END_TYPE
-TYPE tArr : ARRAY[1..10] OF POINTER TO Int;
+TYPE tArr : Array[1..10] Of Pointer To Int;
 END_TYPE

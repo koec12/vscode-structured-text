@@ -102,7 +102,7 @@ describe('lint rules', () => {
         expect(only('missing-header', 'FUNCTION_BLOCK fbX\n')).toEqual(['0:0']);
         expect(only('missing-header', '(* header *)\nFUNCTION_BLOCK fbX\n')).toEqual([]);
     });
-    it('the guideline sample produces no naming or structure findings', () => {
+    it('the fbRuntime sample produces no naming or structure findings', () => {
         const src = readFileSync('test/format/fixtures/fbruntime.expected.st', 'utf8');
         const found = lint(src, ST).filter((d) => d.rule !== 'no-underscore-in-names');
         expect(found.map((d) => `${d.rule}@${d.line}`)).toEqual([]);
@@ -111,5 +111,46 @@ describe('lint rules', () => {
         const d = lint('JMP x;\n', ST, { rules: { 'no-jump': 'error' } });
         expect(d.find((x) => x.rule === 'no-jump')?.severity).toBe('error');
         expect(lint('JMP x;\n', ST, { rules: { 'no-jump': 'off' } }).some((x) => x.rule === 'no-jump')).toBe(false);
+    });
+});
+
+describe('reported issues', () => {
+    const src = [
+        'FUNCTION_BLOCK fbTransport',
+        'VAR_OUTPUT',
+        '    qltRemainingTime : LReal; // [min] Accumulated time in state',
+        '    qbControlHigh : Bool;',
+        'END_VAR',
+        '',
+        'VAR_IN_OUT',
+        '    iqItemStore : Array[*] Of tTransportItem;',
+        'END_VAR',
+        'If a Then',
+        '    qbControlHigh := True;',
+        'Elsif b Then',
+        '    qbControlHigh := False;',
+        'End_If',
+        'END_FUNCTION_BLOCK',
+    ].join('\n');
+    const found = lint(src, ST);
+
+    it('explains a prefix of the wrong type and keeps the base name in the suggestion', () => {
+        const d = found.filter((x) => x.rule === 'variable-prefix');
+        expect(d.map((x) => x.line)).toEqual([2]);
+        expect(d[0].message).toBe("Output 'qltRemainingTime' has type LReal: use the prefix 'qlr' ('lt' is the prefix for LTime), e.g. 'qlrRemainingTime'.");
+    });
+    it('accepts Pascal case Array / Of, True / False and Elsif', () => {
+        expect(found.filter((x) => x.rule === 'keyword-case')).toEqual([]);
+    });
+    it('asks for Elsif, not ElsIf', () => {
+        const d = lint('If a Then\nELSIF b Then\nEnd_If\n', ST).filter((x) => x.rule === 'keyword-case');
+        expect(d.map((x) => x.message)).toEqual(["'ELSIF' should be written 'Elsif'."]);
+    });
+    it('messages do not cite guideline sections', () => {
+        const all = lint(readFileSync('samples/fbSwitchBistable.st', 'utf8'), ST, { rules: { 'missing-header': 'warning' } });
+        expect(all.length).toBeGreaterThan(0);
+        for (const d of all) {
+            expect(d.message).not.toMatch(/guideline|\d\.\d\.\d/i);
+        }
     });
 });
