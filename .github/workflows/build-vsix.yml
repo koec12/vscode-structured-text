@@ -1,0 +1,70 @@
+name: Build VSIX
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch (or tag / commit SHA) to build
+        required: true
+        default: main
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build .vsix from ${{ inputs.ref }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out ${{ inputs.ref }}
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Grammar tests
+        run: npm run test:grammar
+
+      - name: Package extension
+        id: package
+        run: |
+          version=$(node -p "require('./package.json').version")
+          sha=$(git rev-parse --short HEAD)
+          file="vscode-structured-text-${version}-${sha}.vsix"
+          # vscode:prepublish runs `npm run build` (grammars, typecheck, bundle)
+          npx vsce package --out "$file"
+          echo "file=$file" >> "$GITHUB_OUTPUT"
+          echo "name=vscode-structured-text-${version}-${sha}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload .vsix
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ steps.package.outputs.name }}
+          path: ${{ steps.package.outputs.file }}
+          if-no-files-found: error
+
+      - name: Summary
+        env:
+          REF: ${{ inputs.ref }}
+          FILE: ${{ steps.package.outputs.file }}
+        run: |
+          {
+            echo "### Built \`$FILE\`"
+            echo
+            echo "Ref: \`$REF\` @ \`$(git rev-parse --short HEAD)\`"
+            echo
+            echo "Download it from the **Artifacts** section of this run, then install with"
+            echo "*Extensions: Install from VSIX...* in VS Code."
+          } >> "$GITHUB_STEP_SUMMARY"
