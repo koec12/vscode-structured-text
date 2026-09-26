@@ -21,6 +21,26 @@ Language support for PLC programming in **IEC 61131-3 Structured Text** (CODESYS
 | Blocks | PROGRAM, FUNCTION_BLOCK, FUNCTION, METHOD, PROPERTY, INTERFACE, ACTION, TYPE/STRUCT/UNION | ORGANIZATION_BLOCK, DATA_BLOCK, BEGIN, REGION, `TITLE =`, `VERSION :` |
 | OOP | EXTENDS, IMPLEMENTS, THIS^, SUPER^, `__NEW`, REFERENCE TO, POINTER TO, `S=`/`R=`/`REF=` | |
 
+### Operator colours
+
+Operators get their own colours so they are easy to spot, whatever colour theme you use:
+
+| Operators | Dark themes | Light themes |
+|---|---|---|
+| Assignment `:=` (also `=>`, `S=`, `R=`, `REF=`) | bold orange | bold dark orange |
+| Comparison `=` `<>` `<` `>` `<=` `>=` | green | dark green |
+| Logical `And` `Or` `Xor` `Not` `And_Then` `Or_Else` `&` | pink | dark pink |
+
+The colours are default values of `editor.tokenColorCustomizations`. The light variants apply to themes with "Light" in their name. To use other colours, add your own rules for the scopes `keyword.operator.assignment.st`, `keyword.operator.comparison.st` and `keyword.operator.logical.st` (`.scl` for SCL) in your settings. Note that your own `textMateRules` list replaces the default list:
+
+```jsonc
+"editor.tokenColorCustomizations": {
+    "textMateRules": [
+        { "scope": ["keyword.operator.assignment.st", "keyword.operator.assignment.scl"], "settings": { "foreground": "#E06C75", "fontStyle": "bold" } }
+    ]
+}
+```
+
 Both grammars are generated from one keyword table (`src/language/keywords.ts`). The formatter and linter use the same table.
 
 ## Formatter

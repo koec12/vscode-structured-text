@@ -320,8 +320,12 @@
           "match": "(?i)\\b(?:END_REPEAT|END_WHILE|END_CASE|CONTINUE|END_FOR|END_IF|REPEAT|RETURN|ELSIF|WHILE|UNTIL|THEN|ELSE|CASE|EXIT|GOTO|FOR|JMP|IF|OF|TO|BY|DO)\\b"
         },
         {
-          "name": "keyword.operator.word.scl",
-          "match": "(?i)\\b(?:AND_THEN|OR_ELSE|AND|XOR|NOT|MOD|OR)\\b"
+          "name": "keyword.operator.logical.scl",
+          "match": "(?i)\\b(?:AND_THEN|OR_ELSE|AND|XOR|NOT|OR)\\b"
+        },
+        {
+          "name": "keyword.operator.arithmetic.scl",
+          "match": "(?i)\\b(?:MOD)\\b"
         },
         {
           "name": "storage.type.pou.scl",
@@ -399,8 +403,12 @@
           "match": "\\*\\*|[-+*/]"
         },
         {
-          "name": "keyword.operator.scl",
-          "match": "[&^]"
+          "name": "keyword.operator.logical.scl",
+          "match": "&"
+        },
+        {
+          "name": "keyword.operator.dereference.scl",
+          "match": "\\^"
         },
         {
           "name": "punctuation.separator.range.scl",

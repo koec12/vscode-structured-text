@@ -86,6 +86,76 @@
       "[siemens-scl]": {
         "editor.tabSize": 4,
         "editor.insertSpaces": true
+      },
+      "editor.tokenColorCustomizations": {
+        "textMateRules": [
+          {
+            "name": "Structured Text: assignment (:=, =>, S=, R=, REF=)",
+            "scope": [
+              "keyword.operator.assignment.st",
+              "keyword.operator.assignment.scl"
+            ],
+            "settings": {
+              "foreground": "#FF9D3D",
+              "fontStyle": "bold"
+            }
+          },
+          {
+            "name": "Structured Text: comparison (=, <>, <, >, <=, >=)",
+            "scope": [
+              "keyword.operator.comparison.st",
+              "keyword.operator.comparison.scl"
+            ],
+            "settings": {
+              "foreground": "#A6E22E"
+            }
+          },
+          {
+            "name": "Structured Text: logical operators (And, Or, Xor, Not, &)",
+            "scope": [
+              "keyword.operator.logical.st",
+              "keyword.operator.logical.scl"
+            ],
+            "settings": {
+              "foreground": "#FF6AC1"
+            }
+          }
+        ],
+        "[*Light*]": {
+          "textMateRules": [
+            {
+              "name": "Structured Text: assignment (:=, =>, S=, R=, REF=)",
+              "scope": [
+                "keyword.operator.assignment.st",
+                "keyword.operator.assignment.scl"
+              ],
+              "settings": {
+                "foreground": "#C24E00",
+                "fontStyle": "bold"
+              }
+            },
+            {
+              "name": "Structured Text: comparison (=, <>, <, >, <=, >=)",
+              "scope": [
+                "keyword.operator.comparison.st",
+                "keyword.operator.comparison.scl"
+              ],
+              "settings": {
+                "foreground": "#2E7D0E"
+              }
+            },
+            {
+              "name": "Structured Text: logical operators (And, Or, Xor, Not, &)",
+              "scope": [
+                "keyword.operator.logical.st",
+                "keyword.operator.logical.scl"
+              ],
+              "settings": {
+                "foreground": "#C2187A"
+              }
+            }
+          ]
+        }
       }
     },
     "configuration": {

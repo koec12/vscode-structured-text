@@ -329,8 +329,12 @@
           "match": "(?i)\\b(?:END_REPEAT|END_WHILE|__FINALLY|END_CASE|CONTINUE|__ENDTRY|END_FOR|__CATCH|END_IF|REPEAT|RETURN|ELSIF|WHILE|UNTIL|__TRY|THEN|ELSE|CASE|EXIT|FOR|JMP|IF|OF|TO|BY|DO)\\b"
         },
         {
-          "name": "keyword.operator.word.st",
-          "match": "(?i)\\b(?:AND_THEN|OR_ELSE|AND|XOR|NOT|MOD|OR)\\b"
+          "name": "keyword.operator.logical.st",
+          "match": "(?i)\\b(?:AND_THEN|OR_ELSE|AND|XOR|NOT|OR)\\b"
+        },
+        {
+          "name": "keyword.operator.arithmetic.st",
+          "match": "(?i)\\b(?:MOD)\\b"
         },
         {
           "name": "storage.type.pou.st",
@@ -416,8 +420,12 @@
           "match": "\\*\\*|[-+*/]"
         },
         {
-          "name": "keyword.operator.st",
-          "match": "[&^]"
+          "name": "keyword.operator.logical.st",
+          "match": "&"
+        },
+        {
+          "name": "keyword.operator.dereference.st",
+          "match": "\\^"
         },
         {
           "name": "punctuation.separator.range.st",
