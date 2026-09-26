@@ -1,0 +1,239 @@
+{
+  "Source file header": {
+    "prefix": "header",
+    "description": "Source file header with version table (guideline 4.1.1.1)",
+    "body": [
+      "(*",
+      "**©${CURRENT_YEAR} ${1:<Company>} - TITLE ='[V#01.01.01.03] ${2:Title}'**",
+      "",
+      "========================  ================  ===========  =========================================",
+      "Version Number            Date              Signature    Description",
+      "========================  ================  ===========  =========================================",
+      "V#01.01.01.03             ${CURRENT_YEAR}.${CURRENT_MONTH}.${CURRENT_DATE}        ${3:<Sign>}       Original version.",
+      "========================  ================  ===========  =========================================",
+      "",
+      "Functionality",
+      "=======================",
+      "${4:Describe the functionality of the block.}",
+      "",
+      "*)"
+    ]
+  },
+  "Function block": {
+    "prefix": "fb",
+    "description": "SCL FUNCTION_BLOCK skeleton with sections in the mandated order",
+    "body": [
+      "FUNCTION_BLOCK \"fb${1:Name}\"",
+      "TITLE = ${2:Title}",
+      "{ S7_Optimized_Access := 'TRUE' }",
+      "AUTHOR : ${3:Author}",
+      "FAMILY : ${4:Family}",
+      "VERSION : 0.1",
+      "VAR CONSTANT",
+      "END_VAR",
+      "",
+      "VAR_INPUT",
+      "    ${5}",
+      "END_VAR",
+      "",
+      "VAR_OUTPUT",
+      "END_VAR",
+      "",
+      "VAR_IN_OUT",
+      "END_VAR",
+      "",
+      "VAR //Static",
+      "END_VAR",
+      "",
+      "VAR_TEMP",
+      "END_VAR",
+      "",
+      "BEGIN",
+      "REGION Populate/Initialize temporaries and other variables",
+      "END_REGION",
+      "",
+      "REGION Handle/Validate inputs",
+      "END_REGION",
+      "",
+      "REGION ${6:Do <whatever the program should do>}",
+      "    $0",
+      "END_REGION",
+      "",
+      "REGION Write to outputs",
+      "END_REGION",
+      "END_FUNCTION_BLOCK"
+    ]
+  },
+  "Function": {
+    "prefix": "fc",
+    "description": "SCL FUNCTION skeleton",
+    "body": [
+      "FUNCTION \"fc${1:Name}\" : ${2:Void}",
+      "TITLE = ${3:Title}",
+      "{ S7_Optimized_Access := 'TRUE' }",
+      "VERSION : 0.1",
+      "VAR_INPUT",
+      "    ${4}",
+      "END_VAR",
+      "",
+      "VAR_TEMP",
+      "END_VAR",
+      "",
+      "BEGIN",
+      "    $0",
+      "END_FUNCTION"
+    ]
+  },
+  "Organization block": {
+    "prefix": "ob",
+    "description": "SCL ORGANIZATION_BLOCK skeleton",
+    "body": [
+      "ORGANIZATION_BLOCK \"${1:Main}\"",
+      "TITLE = ${2:Title}",
+      "{ S7_Optimized_Access := 'TRUE' }",
+      "VERSION : 0.1",
+      "VAR_TEMP",
+      "END_VAR",
+      "",
+      "BEGIN",
+      "    $0",
+      "END_ORGANIZATION_BLOCK"
+    ]
+  },
+  "Data block": {
+    "prefix": "db",
+    "description": "SCL global DATA_BLOCK skeleton",
+    "body": [
+      "DATA_BLOCK \"${1:gDb}\"",
+      "{ S7_Optimized_Access := 'TRUE' }",
+      "VERSION : 0.1",
+      "NON_RETAIN",
+      "VAR",
+      "    ${2:gbValue} : ${3:Bool};",
+      "END_VAR",
+      "",
+      "BEGIN",
+      "",
+      "END_DATA_BLOCK"
+    ]
+  },
+  "Data type (struct)": {
+    "prefix": "type",
+    "description": "SCL user defined STRUCT type (guideline 4.2)",
+    "body": [
+      "TYPE \"t${1:Name}\"",
+      "VERSION : 0.1",
+      "    STRUCT",
+      "        ${2:rValue} : ${3:Real};   //${4:Comment}",
+      "    END_STRUCT;",
+      "END_TYPE"
+    ]
+  },
+  "Region": {
+    "prefix": "region",
+    "description": "REGION block",
+    "body": [
+      "REGION ${1:Name}",
+      "    $0",
+      "END_REGION"
+    ]
+  },
+  "Finite state machine": {
+    "prefix": "fsm",
+    "description": "CASE based finite state machine (guideline 4.1.1.2.12)",
+    "body": [
+      "//State machine",
+      "Case #${1:siState} Of",
+      "    #${2:ciInitState}:       //${3:Initial state}",
+      "        If ${4:<High state feedback>} Then",
+      "            #${1}                     := #${5:ciHigh};",
+      "        End_If;",
+      "    #${5}:       //${6:High state}",
+      "        $0",
+      "End_Case;"
+    ]
+  },
+  "Positive edge": {
+    "prefix": "edge",
+    "description": "Positive edge detection (guideline 4.1.1.2.9)",
+    "body": [
+      "#tb${1:Rx}   := #${2:RX} And Not #sb${1}; //positive edge",
+      "#sb${1}   := #${2};",
+      "If #tb${1} Then",
+      "    $0",
+      "End_If;"
+    ]
+  },
+  "Timing": {
+    "prefix": "timing",
+    "description": "Timing with a free running time tick (guideline 4.1.1.2.8)",
+    "body": [
+      "#tltTime      := #tltNow - #slt${1:Time};",
+      "If (#tltTime >= ${2:LT#1s}) Then",
+      "    $0",
+      "    #slt${1}  := #tltNow; //Retrigger timing",
+      "End_If;"
+    ]
+  },
+  "Function block call": {
+    "prefix": "fbcall",
+    "description": "Function block call layout (guideline 4.1.1.2.7)",
+    "body": [
+      "#${1:sInstance}",
+      "    ( //${2:Comment}",
+      "    ${3:iInput} := #${4:tValue}",
+      "    );",
+      "$0"
+    ]
+  },
+  "If": {
+    "prefix": "if",
+    "body": [
+      "If #${1:condition} Then",
+      "    $0",
+      "End_If;"
+    ]
+  },
+  "If Else": {
+    "prefix": "ifelse",
+    "body": [
+      "If #${1:condition} Then",
+      "    $2",
+      "Else",
+      "    $0",
+      "End_If;"
+    ]
+  },
+  "Case": {
+    "prefix": "case",
+    "description": "CASE statement - use constants as labels (guideline 4.1.1.2.4)",
+    "body": [
+      "Case #${1:siState} Of",
+      "    #${2:ciConstant01}: //${3:Comment}",
+      "        $0",
+      "End_Case;"
+    ]
+  },
+  "For": {
+    "prefix": "for",
+    "description": "FOR loop (preferred loop, guideline 4.1.1.2.11)",
+    "body": [
+      "For #${1:tiI} := ${2:1} To #${3:ciMax} Do",
+      "    $0",
+      "End_For;"
+    ]
+  },
+  "Section comment": {
+    "prefix": "section",
+    "description": "Code section documentation block (guideline 4.1.1.2.3)",
+    "body": [
+      "(*",
+      "---------------------------------------------------------------------------------------",
+      " ${1:Code Section}",
+      "",
+      " $0",
+      "---------------------------------------------------------------------------------------",
+      "*)"
+    ]
+  }
+}

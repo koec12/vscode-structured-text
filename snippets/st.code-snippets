@@ -1,0 +1,329 @@
+{
+  "Source file header": {
+    "prefix": "header",
+    "description": "Source file header with version table (guideline 4.1.1.1)",
+    "body": [
+      "(*",
+      "**©${CURRENT_YEAR} ${1:<Company>} - TITLE ='[V#01.01.01.03] ${2:Title}'**",
+      "",
+      "========================  ================  ===========  =========================================",
+      "Version Number            Date              Signature    Description",
+      "========================  ================  ===========  =========================================",
+      "V#01.01.01.03             ${CURRENT_YEAR}.${CURRENT_MONTH}.${CURRENT_DATE}        ${3:<Sign>}       Original version.",
+      "========================  ================  ===========  =========================================",
+      "",
+      "Functionality",
+      "=======================",
+      "${4:Describe the functionality of the block.}",
+      "",
+      "*)"
+    ]
+  },
+  "Function block": {
+    "prefix": "fb",
+    "description": "FUNCTION_BLOCK skeleton with sections in the mandated order (guideline 4.1.1.1, 4.1.1.2.2)",
+    "body": [
+      "FUNCTION_BLOCK fb${1:Name}",
+      "(*",
+      "Copyright ©${CURRENT_YEAR} ${2:<Company>}. All rights reserved. Reproduction in whole or in",
+      "part in any form or medium without express written permission of ${2} is",
+      "prohibited.",
+      "",
+      "===============================================================================",
+      "",
+      "Alteration history refers to routine 'Version identification for software in",
+      "Codesys/Beckhoff PLCs'.",
+      "",
+      "[V#01.01.01.03],${3:<Author initials>},${CURRENT_YEAR}${CURRENT_MONTH}${CURRENT_DATE}    Original Version.",
+      "AUTHOR  : ${3}",
+      "FAMILY  : ${4:<Family>}",
+      "NAME    : fb${1}",
+      "*)",
+      "",
+      "VAR CONSTANT",
+      "END_VAR",
+      "",
+      "VAR_INPUT",
+      "    ${5}",
+      "END_VAR",
+      "",
+      "VAR_OUTPUT",
+      "END_VAR",
+      "",
+      "VAR_IN_OUT",
+      "END_VAR",
+      "",
+      "VAR //Static",
+      "END_VAR",
+      "",
+      "VAR_TEMP",
+      "END_VAR",
+      "",
+      "//Populate/Initialize temporaries and other variables",
+      "",
+      "//Handle/Validate inputs",
+      "",
+      "//Do ${9:<whatever the program should do>}",
+      "$0",
+      "",
+      "//Write to outputs",
+      "",
+      "END_FUNCTION_BLOCK"
+    ]
+  },
+  "Function": {
+    "prefix": "fc",
+    "description": "FUNCTION skeleton (guideline 2.1.5.1, 4.1.1.1)",
+    "body": [
+      "FUNCTION fc${1:Name} : ${2:Int}",
+      "(*",
+      "Copyright ©${CURRENT_YEAR} ${3:<Company>}. All rights reserved. Reproduction in whole or in",
+      "part in any form or medium without express written permission of ${3} is",
+      "prohibited.",
+      "",
+      "===============================================================================",
+      "",
+      "Alteration history refers to routine 'Version identification for software in",
+      "Codesys/Beckhoff PLCs'.",
+      "",
+      "[V#01.01.01.03],${4:<Author initials>},${CURRENT_YEAR}${CURRENT_MONTH}${CURRENT_DATE}    Original Version.",
+      "AUTHOR  : ${4}",
+      "FAMILY  : ${5:<Family>}",
+      "NAME    : fc${1}",
+      "*)",
+      "",
+      "VAR CONSTANT",
+      "END_VAR",
+      "",
+      "VAR_INPUT",
+      "    ${6}",
+      "END_VAR",
+      "",
+      "VAR //Temporary (not static in functions)",
+      "END_VAR",
+      "",
+      "//Populate/Initialize temporaries and other variables",
+      "",
+      "//Handle/Validate inputs",
+      "",
+      "//Do ${9:<whatever the program should do>}",
+      "$0",
+      "",
+      "//Write to outputs",
+      "",
+      "fc${1} := ${10:tResult};",
+      "END_FUNCTION"
+    ]
+  },
+  "Program": {
+    "prefix": "prg",
+    "description": "PROGRAM skeleton",
+    "body": [
+      "PROGRAM prg${1:Main}",
+      "VAR //Static",
+      "    ${2}",
+      "END_VAR",
+      "",
+      "$0",
+      "END_PROGRAM"
+    ]
+  },
+  "Method": {
+    "prefix": "method",
+    "description": "METHOD skeleton",
+    "body": [
+      "METHOD ${1|PUBLIC,PRIVATE,PROTECTED,INTERNAL|} m${2:Name} : ${3:Bool}",
+      "VAR_INPUT",
+      "    ${4}",
+      "END_VAR",
+      "",
+      "$0",
+      "END_METHOD"
+    ]
+  },
+  "Data type (struct)": {
+    "prefix": "type",
+    "description": "User defined STRUCT type (guideline 4.2)",
+    "body": [
+      "TYPE t${1:Name} :",
+      "(*",
+      "Copyright ©${CURRENT_YEAR} ${2:<Company>}. All rights reserved.",
+      "===============================================================================",
+      "[V#01.01.01.03], ${3:<Author initials>},${CURRENT_YEAR}${CURRENT_MONTH}${CURRENT_DATE}    Original Version.",
+      "AUTHOR  : ${3}",
+      "*)",
+      "    STRUCT",
+      "        ${4:rValue}                          : ${5:Real};            //${6:Comment}",
+      "    END_STRUCT",
+      "END_TYPE"
+    ]
+  },
+  "Union for bit access": {
+    "prefix": "union",
+    "description": "Bit-access union overlaying a word (guideline 4.1.1.2.10)",
+    "body": [
+      "TYPE u${1:Name} :",
+      "    UNION",
+      "        b   : t${2:BitStruct};  //For Bit Access",
+      "        w   : Word;         //For Word Access",
+      "    END_UNION",
+      "END_TYPE"
+    ]
+  },
+  "Finite state machine": {
+    "prefix": "fsm",
+    "description": "CASE based finite state machine (guideline 4.1.1.2.12)",
+    "body": [
+      "//State machine",
+      "Case ${1:siState} Of",
+      "    ${2:ciInitState}:       //${3:Initial state}",
+      "        If ${4:<High state feedback>} Then",
+      "            ${1}                     := ${5:ciHigh};",
+      "        End_If;",
+      "    ${5}:       //${6:High state}",
+      "        $0",
+      "End_Case;"
+    ]
+  },
+  "Positive edge": {
+    "prefix": "edge",
+    "description": "Positive edge detection (guideline 4.1.1.2.9)",
+    "body": [
+      "tb${1:Rx}   := ${2:RX} And Not sb${1}; //tb${1} is positive edge for ${2}",
+      "sb${1}   := ${2};              //Save ${2} in sb${1} to disable edge as long as ${2} stays true",
+      "If tb${1} Then",
+      "    $0",
+      "End_If;"
+    ]
+  },
+  "Edge (change)": {
+    "prefix": "edgechange",
+    "description": "Positive and negative edge detection with XOR (guideline 4.1.1.2.9)",
+    "body": [
+      "tb${1:Rx}   := ${2:RX} Xor sb${1};     //tb${1} reflects a change in ${2}",
+      "sb${1}   := ${2};              //Save ${2} in sb${1}",
+      "If (tb${1} And sb${1}) Then           //Positive edge on ${2}",
+      "    $0",
+      "End_If;",
+      "If (tb${1} And Not sb${1}) Then       //Negative edge on ${2}",
+      "End_If;"
+    ]
+  },
+  "Timing": {
+    "prefix": "timing",
+    "description": "Timing with a free running time tick (guideline 4.1.1.2.8)",
+    "body": [
+      "tltTime      := tltNow - slt${1:Time};",
+      "If (tltTime >= ${2:LT#1s}) Then",
+      "    $0",
+      "    slt${1}  := tltNow; //Retrigger timing",
+      "End_If;"
+    ]
+  },
+  "Function block call": {
+    "prefix": "fbcall",
+    "description": "Function block call layout (guideline 4.1.1.2.7)",
+    "body": [
+      "${1:sInstance}",
+      "    ( //${2:Comment}",
+      "    ${3:iInput} := ${4:tValue}",
+      "    );",
+      "$0"
+    ]
+  },
+  "Function call": {
+    "prefix": "fccall",
+    "description": "Function call layout (guideline 4.1.1.2.6)",
+    "body": [
+      "${1:tResult} := ${2:fcName}",
+      "    ( //${3:Comment}",
+      "    ${4:iInput} := ${5:tValue}",
+      "    );",
+      "$0"
+    ]
+  },
+  "If": {
+    "prefix": "if",
+    "body": [
+      "If ${1:condition} Then",
+      "    $0",
+      "End_If;"
+    ]
+  },
+  "If Else": {
+    "prefix": "ifelse",
+    "body": [
+      "If ${1:condition} Then",
+      "    $2",
+      "Else",
+      "    $0",
+      "End_If;"
+    ]
+  },
+  "If ElsIf": {
+    "prefix": "ifelsif",
+    "body": [
+      "If ${1:condition} Then",
+      "    $2",
+      "ElsIf ${3:condition} Then",
+      "    $0",
+      "End_If;"
+    ]
+  },
+  "Case": {
+    "prefix": "case",
+    "description": "CASE statement - use constants as labels (guideline 4.1.1.2.4)",
+    "body": [
+      "Case ${1:siState} Of",
+      "    ${2:ciConstant01}: //${3:Comment}",
+      "        $0",
+      "End_Case;"
+    ]
+  },
+  "For": {
+    "prefix": "for",
+    "description": "FOR loop (preferred loop, guideline 4.1.1.2.11)",
+    "body": [
+      "For ${1:tiI} := ${2:1} To ${3:ciMax} Do",
+      "    $0",
+      "End_For;"
+    ]
+  },
+  "Section comment": {
+    "prefix": "section",
+    "description": "Code section documentation block (guideline 4.1.1.2.3)",
+    "body": [
+      "(*",
+      "---------------------------------------------------------------------------------------",
+      " ${1:Code Section}",
+      "",
+      " $0",
+      "---------------------------------------------------------------------------------------",
+      "*)"
+    ]
+  },
+  "Summary": {
+    "prefix": "summary",
+    "description": "XML summary (guideline 6.4)",
+    "body": [
+      "///<summary>",
+      "/// ${1:The first paragraph of the summary.}",
+      "///</summary>"
+    ]
+  },
+  "Param": {
+    "prefix": "param",
+    "description": "Input/output documentation (guideline 6.5)",
+    "body": [
+      "///<param name=\"${1:ibInput}\"> ${2:BOOL}: ${3:Description} </param>"
+    ]
+  },
+  "Returns": {
+    "prefix": "returns",
+    "description": "Return value documentation (guideline 6.5)",
+    "body": [
+      "///<summary>Return Value</summary>",
+      "///<returns> ${1:Description} </returns>"
+    ]
+  }
+}
