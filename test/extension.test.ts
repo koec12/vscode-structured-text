@@ -130,8 +130,8 @@ describe('extension wiring', () => {
     });
 
     it('offers a format quick fix for fixable diagnostics', () => {
-        const actions = registered.codeActions.provideCodeActions(doc(''), null, { diagnostics: [{ source: 'st-guideline', code: 'keyword-case' }] });
+        const actions = registered.codeActions.provideCodeActions(doc(''), null, { diagnostics: [{ source: 'structured-text', code: 'keyword-case' }] });
         expect(actions[0].command.command).toBe('editor.action.formatDocument');
-        expect(registered.codeActions.provideCodeActions(doc(''), null, { diagnostics: [{ source: 'st-guideline', code: 'no-jump' }] })).toEqual([]);
+        expect(registered.codeActions.provideCodeActions(doc(''), null, { diagnostics: [{ source: 'structured-text', code: 'no-jump' }] })).toEqual([]);
     });
 });

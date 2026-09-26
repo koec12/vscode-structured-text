@@ -1,7 +1,7 @@
 {
   "name": "vscode-structured-text",
   "displayName": "Structured Text & SCL",
-  "description": "Syntax highlighting, guideline-based formatter, lint, outline, folding and snippets for IEC 61131-3 Structured Text (CODESYS / TwinCAT) and Siemens SCL.",
+  "description": "Syntax highlighting, formatter, lint, outline, folding and snippets for IEC 61131-3 Structured Text (CODESYS / TwinCAT) and Siemens SCL.",
   "version": "0.1.0",
   "publisher": "koec12",
   "repository": {
@@ -106,9 +106,9 @@
             "preserve"
           ],
           "enumDescriptions": [
-            "If, ElsIf, End_If, And, Not (guideline 4.1.1.2)",
-            "if, elsif, end_if, and, not (guideline 4.1.1.2)",
-            "IF, ELSIF, END_IF - NOT guideline conformant, but the Siemens TIA convention",
+            "If, Elsif, End_If, And, Not",
+            "if, elsif, end_if, and, not",
+            "IF, ELSIF, END_IF (Siemens TIA convention)",
             "Leave the casing unchanged"
           ],
           "default": "pascal",
@@ -125,7 +125,7 @@
           ],
           "default": "upper",
           "scope": "language-overridable",
-          "description": "Casing of POU and declaration keywords (FUNCTION_BLOCK, VAR_INPUT, END_VAR, STRUCT, ARRAY ... OF, BEGIN)."
+          "description": "Casing of POU and declaration keywords (FUNCTION_BLOCK, VAR_INPUT, END_VAR, STRUCT, BEGIN)."
         },
         "structuredText.format.dataTypeCase": {
           "type": "string",
@@ -137,7 +137,7 @@
           ],
           "default": "pascal",
           "scope": "language-overridable",
-          "description": "Casing of elementary data types (Bool, LReal, LTime / BOOL, LREAL, LTIME)."
+          "description": "Casing of data types and type definitions (Bool, LReal, LTime, Array[..] Of, Pointer To / BOOL, LREAL, ARRAY[..] OF)."
         },
         "structuredText.format.builtinFunctionCase": {
           "type": "string",
@@ -154,39 +154,39 @@
         "structuredText.format.booleanLiteralCase": {
           "type": "string",
           "enum": [
-            "lower",
             "pascal",
+            "lower",
             "upper",
             "preserve"
           ],
-          "default": "lower",
+          "default": "pascal",
           "scope": "language-overridable",
-          "description": "Casing of the literals TRUE and FALSE."
+          "description": "Casing of the literals TRUE and FALSE (True / False)."
         },
         "structuredText.format.indentPouBody": {
           "type": "boolean",
           "default": false,
           "scope": "language-overridable",
-          "description": "Indent VAR sections and code inside a POU (the guideline keeps them at column 0)."
+          "description": "Indent VAR sections and code inside a POU."
         },
         "structuredText.format.splitStatements": {
           "type": "boolean",
           "default": true,
           "scope": "language-overridable",
-          "description": "Put every statement on its own line and expand one-line IF/CASE/FOR/WHILE constructs (guideline 4.1.1.2.1)."
+          "description": "Put every statement on its own line and expand one-line IF/CASE/FOR/WHILE constructs."
         },
         "structuredText.format.alignAssignments": {
           "type": "boolean",
           "default": true,
           "scope": "language-overridable",
-          "description": "Vertically align ':=' in consecutive assignment lines (guideline 4.1.1.2.1)."
+          "description": "Vertically align ':=' in consecutive assignment lines."
         },
         "structuredText.format.assignmentAlignColumn": {
           "type": "integer",
           "default": 41,
           "minimum": 0,
           "scope": "language-overridable",
-          "description": "1-based column at which every ':=' of an assignment statement is aligned (the guideline aligns the code section on one column; 41 is a multiple of 4 + 1). Assignments whose left-hand side does not fit get a single space. 0 = align ':=' per run of consecutive assignments instead. Named call arguments are always aligned per call."
+          "description": "1-based column at which every ':=' of an assignment statement is aligned. Assignments whose left-hand side does not fit get a single space. 0 = align ':=' per run of consecutive assignments instead. Named call arguments are always aligned per call."
         },
         "structuredText.format.assignmentMaxColumn": {
           "type": "integer",
@@ -199,7 +199,7 @@
           "type": "boolean",
           "default": true,
           "scope": "language-overridable",
-          "description": "Lay out declarations in three aligned columns: name, type and comment (guideline 4.1.1.2.2)."
+          "description": "Lay out declarations in three aligned columns: name, type and comment."
         },
         "structuredText.format.declarationMaxColumn": {
           "type": "integer",
@@ -218,13 +218,13 @@
           "type": "boolean",
           "default": true,
           "scope": "language-overridable",
-          "description": "Separate consecutive VAR sections with exactly one blank line (guideline 4.1.1.2.2)."
+          "description": "Separate consecutive VAR sections with exactly one blank line."
         },
         "structuredText.format.reorderVarSections": {
           "type": "boolean",
           "default": false,
           "scope": "language-overridable",
-          "description": "Reorder VAR sections to VAR CONSTANT, VAR_INPUT, VAR_OUTPUT, VAR_IN_OUT, VAR, VAR_TEMP (guideline 4.1.1.2.2)."
+          "description": "Reorder VAR sections to VAR CONSTANT, VAR_INPUT, VAR_OUTPUT, VAR_IN_OUT, VAR, VAR_TEMP."
         },
         "structuredText.format.maxBlankLines": {
           "type": "integer",
@@ -236,16 +236,16 @@
         "structuredText.format.callStyle": {
           "type": "string",
           "enum": [
-            "guideline",
-            "guideline-always",
+            "multiline",
+            "always",
             "preserve"
           ],
           "enumDescriptions": [
-            "Multi-line calls with named arguments are laid out as in guideline 4.1.1.2.6/7",
+            "Multi-line calls with named arguments get one argument per line, with the parentheses on their own lines",
             "Additionally expand single-line calls with at least 'callExpandMinArgs' named arguments",
             "Keep the line structure of calls"
           ],
-          "default": "guideline",
+          "default": "multiline",
           "scope": "language-overridable",
           "description": "Layout of function / function block calls with named arguments."
         },
@@ -254,25 +254,25 @@
           "default": 3,
           "minimum": 1,
           "scope": "language-overridable",
-          "description": "Minimum number of named arguments before a call is expanded when callStyle is 'guideline-always'."
+          "description": "Minimum number of named arguments before a call is expanded when callStyle is 'always'."
         },
         "structuredText.lint.enable": {
           "type": "boolean",
           "default": true,
           "scope": "language-overridable",
-          "description": "Report programming-guideline violations as diagnostics."
+          "description": "Report coding convention violations as diagnostics."
         },
         "structuredText.lint.allowCfcStyleIo": {
           "type": "boolean",
           "default": true,
           "scope": "language-overridable",
-          "description": "Accept all-uppercase input/output names of up to 8 characters (CFC style, IEC PAS 63131 terminal names such as XGH or PTDH) - guideline 4.1.1.1.3."
+          "description": "Accept all-uppercase input/output names of up to 8 characters (CFC style, IEC PAS 63131 terminal names such as XGH or PTDH)."
         },
         "structuredText.lint.checkStructMembers": {
           "type": "boolean",
           "default": false,
           "scope": "language-overridable",
-          "description": "Also check type prefixes of STRUCT/UNION members (the guideline allows omitting them for exposed structures)."
+          "description": "Also check type prefixes of STRUCT/UNION members."
         },
         "structuredText.lint.rules": {
           "type": "object",
@@ -290,7 +290,7 @@
                 "error"
               ],
               "default": "warning",
-              "description": "Keyword casing differs from the configured casing (guideline 4.1.1.2)."
+              "description": "Keyword casing differs from the configured casing."
             },
             "one-statement-per-line": {
               "type": "string",
@@ -302,7 +302,7 @@
                 "error"
               ],
               "default": "warning",
-              "description": "Several statements on one line (guideline 4.1.1.2.1)."
+              "description": "Several statements on one line."
             },
             "var-section-order": {
               "type": "string",
@@ -314,7 +314,7 @@
                 "error"
               ],
               "default": "warning",
-              "description": "VAR sections out of order or not separated by a blank line (guideline 4.1.1.2.2)."
+              "description": "VAR sections out of order or not separated by a blank line."
             },
             "no-direct-address": {
               "type": "string",
@@ -326,7 +326,7 @@
                 "error"
               ],
               "default": "warning",
-              "description": "Absolute addresses (%I, %Q, %M) used in code (guideline 4.1.1.1 Robust Programming)."
+              "description": "Absolute addresses (%I, %Q, %M) used in code."
             },
             "no-jump": {
               "type": "string",
@@ -338,7 +338,7 @@
                 "error"
               ],
               "default": "warning",
-              "description": "JMP / GOTO used (guideline 4.1.1.2.2)."
+              "description": "JMP / GOTO used."
             },
             "case-numeric-label": {
               "type": "string",
@@ -350,7 +350,7 @@
                 "error"
               ],
               "default": "warning",
-              "description": "Plain numbers used as CASE labels instead of constants (guideline 4.1.1.2.4)."
+              "description": "Plain numbers used as CASE labels instead of constants."
             },
             "explicit-parentheses": {
               "type": "string",
@@ -362,7 +362,7 @@
                 "error"
               ],
               "default": "information",
-              "description": "Operators of different precedence mixed without parentheses (guideline 4.1.1.2)."
+              "description": "Operators of different precedence mixed without parentheses."
             },
             "for-counter-modified": {
               "type": "string",
@@ -374,7 +374,7 @@
                 "error"
               ],
               "default": "warning",
-              "description": "FOR loop counter assigned inside the loop (guideline 4.1.1.2.11)."
+              "description": "FOR loop counter assigned inside the loop."
             },
             "prefer-for-loop": {
               "type": "string",
@@ -386,7 +386,7 @@
                 "error"
               ],
               "default": "hint",
-              "description": "WHILE / REPEAT used; prefer FOR (guideline 4.1.1.2.11)."
+              "description": "WHILE / REPEAT used; prefer FOR."
             },
             "variable-prefix": {
               "type": "string",
@@ -398,7 +398,7 @@
                 "error"
               ],
               "default": "warning",
-              "description": "Variable name does not follow the Hungarian notation prefix rules (guideline 4.1.1.1, 6.1)."
+              "description": "Variable name does not follow the Hungarian notation prefix rules."
             },
             "pou-prefix": {
               "type": "string",
@@ -410,7 +410,7 @@
                 "error"
               ],
               "default": "warning",
-              "description": "POU / type name lacks the fb / fc / prg / t / u prefix (guideline 3.3)."
+              "description": "POU / type name lacks the fb / fc / prg / t / u prefix."
             },
             "no-underscore-in-names": {
               "type": "string",
@@ -422,7 +422,7 @@
                 "error"
               ],
               "default": "hint",
-              "description": "Underscore in a declared name; use CamelCase (guideline 6.1)."
+              "description": "Underscore in a declared name; use CamelCase."
             },
             "missing-header": {
               "type": "string",
@@ -434,7 +434,7 @@
                 "error"
               ],
               "default": "off",
-              "description": "File does not start with the source file header comment (guideline 4.1.1.1)."
+              "description": "File does not start with the source file header comment."
             }
           }
         }

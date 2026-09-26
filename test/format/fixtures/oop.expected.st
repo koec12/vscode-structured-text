@@ -14,8 +14,8 @@ END_VAR;
 
 VAR //Static Data
     sbRx   : Bool;   //Initialize filter
-    sRef   : REFERENCE TO Int;
-    spData : POINTER TO tData;
+    sRef   : Reference To Int;
+    spData : Pointer To tData;
 END_VAR;
 
 VAR_TEMP
@@ -32,13 +32,13 @@ End_If;
 spData                                  := __New(tData);
 sRef REF= siValue;
 If ((tbyXa And 16#01) <> 16#00) Then  //Test for positive edge on bit zero in the byte
-    sbAlarm S= true;
+    sbAlarm S= True;
 End_If
 METHOD PRIVATE mLog : Bool
 VAR_INPUT
     sMsg : String(80);
 END_VAR
-mLog                                    := true;
+mLog                                    := True;
 END_METHOD
 
 PROPERTY pbRunning : Bool

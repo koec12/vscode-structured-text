@@ -13,7 +13,7 @@ Case siState Of
     ciInitState: //Initial State of EUC
         If bHigh Then
             siState                     := ciHigh;
-        ElsIf bLow Then
+        Elsif bLow Then
             siState                     := ciLow;
         End_If
     // EUC in Low state

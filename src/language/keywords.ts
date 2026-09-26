@@ -189,7 +189,6 @@ export type CaseStyle = 'upper' | 'lower' | 'pascal' | 'preserve';
 
 /** Irregular Pascal spellings. Everything else capitalises each `_`-separated part. */
 const PASCAL_OVERRIDES: Record<string, string> = {
-    ELSIF: 'ElsIf',
     // data types
     DWORD: 'DWord', LWORD: 'LWord',
     SINT: 'SInt', USINT: 'USInt', UINT: 'UInt', DINT: 'DInt', UDINT: 'UDInt', LINT: 'LInt', ULINT: 'ULInt',

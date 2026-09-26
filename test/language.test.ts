@@ -55,8 +55,8 @@ describe('lexer', () => {
 });
 
 describe('keywords', () => {
-    it('produces Pascal spellings used by the guideline', () => {
-        expect(pascalCase('ELSIF')).toBe('ElsIf');
+    it('produces Pascal spellings', () => {
+        expect(pascalCase('ELSIF')).toBe('Elsif');
         expect(pascalCase('END_IF')).toBe('End_If');
         expect(pascalCase('LTIME_TO_LINT')).toBe('LTime_To_LInt');
         expect(pascalCase('INT_TO_WORD')).toBe('Int_To_Word');

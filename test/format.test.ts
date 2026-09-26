@@ -83,8 +83,8 @@ describe('options', () => {
             'PROGRAM prgMain\n    VAR\n        x : Int;\n    END_VAR\n    x := 1;\nEND_PROGRAM\n',
         );
     });
-    it('expands calls with many named arguments in guideline-always mode', () => {
-        expect(fmt('sFb(a := 1, b := 2, c := 3);\nsFb(a := 1);\n', { callStyle: 'guideline-always' })).toBe(
+    it('expands calls with many named arguments in always mode', () => {
+        expect(fmt('sFb(a := 1, b := 2, c := 3);\nsFb(a := 1);\n', { callStyle: 'always' })).toBe(
             'sFb\n    (\n    a := 1,\n    b := 2,\n    c := 3\n    );\nsFb(a := 1);\n',
         );
     });
@@ -169,7 +169,7 @@ describe('spacing', () => {
         expect(fmt(src + '\n')).toBe(out + '\n');
     });
     it('keeps array ranges and initialisers tight', () => {
-        expect(fmt('VAR\na : ARRAY [ 1 .. 10 ] OF INT := [ 10 ( 0 ) ];\nEND_VAR\n')).toBe('VAR\n    a : ARRAY[1..10] OF Int := [10(0)];\nEND_VAR\n');
+        expect(fmt('VAR\na : ARRAY [ 1 .. 10 ] OF INT := [ 10 ( 0 ) ];\nEND_VAR\n')).toBe('VAR\n    a : Array[1..10] Of Int := [10(0)];\nEND_VAR\n');
     });
 });
 

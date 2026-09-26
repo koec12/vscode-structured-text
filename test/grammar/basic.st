@@ -27,7 +27,7 @@ If (tltTime >= T#2s) Then
 //       ^^^ support.function.builtin.st
 //                ^^^^^^^ entity.name.function.call.st
 //                                    ^^^^^ constant.numeric.decimal.st
-ElsIf a And Not b Then
+Elsif a And Not b Then
 // <----- keyword.control.st
 //      ^^^ keyword.operator.word.st
     ws := "wide $0041";

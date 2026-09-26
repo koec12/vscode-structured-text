@@ -1,5 +1,5 @@
 /**
- * Lint rules derived from the ST programming guideline. Each rule returns
+ * Lint rules for Structured Text / SCL. Each rule returns
  * findings (message + range); severity is attached by the runner.
  */
 import type { Analysis } from '../language/analysis';
@@ -86,7 +86,7 @@ const keywordCase: Rule = (ctx) => {
         }
         const expected = expectedCase(ctx.tokens, i, ctx.analysis, ctx.dialect, ctx.options);
         if (expected !== undefined && expected !== t.text) {
-            out.push(rangeOf(t, `'${t.text}' should be written '${expected}' (guideline 4.1.1.2 keywords).`));
+            out.push(rangeOf(t, `'${t.text}' should be written '${expected}'.`));
         }
     });
     return out;
@@ -100,7 +100,7 @@ const oneStatementPerLine: Rule = (ctx) => {
         }
         const n = nextCode(ctx, i);
         if (n >= 0 && ctx.tokens[n].line === ctx.tokens[i].line && !ctx.analysis.inDecl[n]) {
-            out.push(rangeOf(ctx.tokens[n], 'Only one statement per line is allowed (guideline 4.1.1.2.1).'));
+            out.push(rangeOf(ctx.tokens[n], 'Only one statement per line is allowed.'));
         }
     }
     return out;
@@ -119,7 +119,7 @@ const varSectionOrder: Rule = (ctx) => {
             const rank = sectionRank(sec);
             const name = [sec.keyword, ...sec.modifiers.filter((m) => m === 'CONSTANT')].join(' ');
             if (rank < maxRank) {
-                out.push(rangeOf(sec.start, `${name} should come before ${maxName}. Order: ${SECTION_ORDER_TEXT} (guideline 4.1.1.2.2).`));
+                out.push(rangeOf(sec.start, `${name} should come before ${maxName}. Order: ${SECTION_ORDER_TEXT}.`));
             }
             if (rank > maxRank) {
                 maxRank = rank;
@@ -129,7 +129,7 @@ const varSectionOrder: Rule = (ctx) => {
             if (prev?.end) {
                 const between = ctx.lines.slice(prev.end.line + 1, sec.start.line);
                 if (sec.start.line > prev.end.line && !between.some((l) => l.trim() === '')) {
-                    out.push(rangeOf(sec.start, 'Separate VAR sections with a blank line (guideline 4.1.1.2.2).'));
+                    out.push(rangeOf(sec.start, 'Separate VAR sections with a blank line.'));
                 }
             }
         });
@@ -140,12 +140,12 @@ const varSectionOrder: Rule = (ctx) => {
 const noDirectAddress: Rule = (ctx) =>
     codeIndices(ctx)
         .filter((i) => ctx.tokens[i].kind === 'address')
-        .map((i) => rangeOf(ctx.tokens[i], `Direct access to absolute address '${ctx.tokens[i].text}' is forbidden; use a symbolic variable (guideline 4.1.1.1 Robust Programming).`));
+        .map((i) => rangeOf(ctx.tokens[i], `Direct access to absolute address '${ctx.tokens[i].text}' is forbidden; use a symbolic variable.`));
 
 const noJump: Rule = (ctx) =>
     codeIndices(ctx)
         .filter((i) => ['JMP', 'GOTO'].includes(kw(ctx, i)))
-        .map((i) => rangeOf(ctx.tokens[i], 'Never use jumps (guideline 4.1.1.2.2 Jumps and complex structures).'));
+        .map((i) => rangeOf(ctx.tokens[i], 'Never use jumps.'));
 
 const caseNumericLabel: Rule = (ctx) => {
     const out: Finding[] = [];
@@ -157,7 +157,7 @@ const caseNumericLabel: Rule = (ctx) => {
             }
             const t = ctx.tokens[i];
             if (t.kind === 'number' || (t.kind === 'literal' && /#[+-]?\d/.test(t.text))) {
-                out.push(rangeOf(t, `CASE label '${t.text}' is a plain number; use a named constant or enumeration (guideline 4.1.1.2.4).`));
+                out.push(rangeOf(t, `CASE label '${t.text}' is a plain number; use a named constant or enumeration.`));
             }
         }
     }
@@ -202,7 +202,7 @@ const explicitParentheses: Rule = (ctx) => {
             f.classes.add(cls);
             if (f.classes.size > 1 && !f.reported) {
                 f.reported = true;
-                out.push(rangeOf(t, `Operators of different precedence (${[...f.classes].join(', ')}) are mixed; add parentheses instead of relying on operator precedence (guideline 4.1.1.2).`));
+                out.push(rangeOf(t, `Operators of different precedence (${[...f.classes].join(', ')}) are mixed; add parentheses instead of relying on operator precedence.`));
             }
             continue;
         }
@@ -244,7 +244,7 @@ const forCounterModified: Rule = (ctx) => {
         }
         const t = ctx.tokens[i];
         if (counters.length && (t.kind === 'word' || t.kind === 'local') && counters.includes(t.text.toUpperCase()) && isStatementStart(ctx, i) && isOp(ctx.tokens[nextCode(ctx, i)], ':=')) {
-            out.push(rangeOf(t, `The FOR loop counter '${t.text}' must not be modified inside the loop (guideline 4.1.1.2.11).`));
+            out.push(rangeOf(t, `The FOR loop counter '${t.text}' must not be modified inside the loop.`));
         }
     }
     return out;
@@ -253,7 +253,7 @@ const forCounterModified: Rule = (ctx) => {
 const preferForLoop: Rule = (ctx) =>
     codeIndices(ctx)
         .filter((i) => ['WHILE', 'REPEAT'].includes(kw(ctx, i)))
-        .map((i) => rangeOf(ctx.tokens[i], `Prefer a FOR loop over ${ctx.tokens[i].text.toUpperCase()}; WHILE/REPEAT can loop endlessly and time out the PLC (guideline 4.1.1.2.11).`));
+        .map((i) => rangeOf(ctx.tokens[i], `Prefer a FOR loop over ${ctx.tokens[i].text.toUpperCase()}; WHILE/REPEAT can loop endlessly and time out the PLC.`));
 
 // --------------------------------------------------------------- naming
 
@@ -297,15 +297,15 @@ function memoryPrefix(pou: Block | undefined, section: Block): { prefix: string;
         case 'VAR_OUTPUT':
             return { prefix: 'q', label: 'output' };
         case 'VAR_IN_OUT':
-            return { prefix: 'iq', label: 'input/output' };
+            return { prefix: 'iq', label: 'in/out variable' };
         case 'VAR_TEMP':
-            return { prefix: 't', label: 'temporary' };
+            return { prefix: 't', label: 'temporary variable' };
         case 'VAR_STAT':
         case 'VAR_INST':
-            return { prefix: 's', label: 'static' };
+            return { prefix: 's', label: 'static variable' };
         case 'VAR_GLOBAL':
         case 'VAR_EXTERNAL':
-            return constant ? { prefix: 'gc', label: 'global constant' } : { prefix: 'g', label: 'global' };
+            return constant ? { prefix: 'gc', label: 'global constant' } : { prefix: 'g', label: 'global variable' };
         case 'VAR':
             if (constant) {
                 return { prefix: 'c', label: 'constant' };
@@ -314,12 +314,12 @@ function memoryPrefix(pou: Block | undefined, section: Block): { prefix: string;
                 return undefined;
             }
             if (pou.keyword === 'FUNCTION' || pou.keyword === 'METHOD') {
-                return { prefix: 't', label: 'temporary' };
+                return { prefix: 't', label: 'temporary variable' };
             }
             if (pou.keyword === 'DATA_BLOCK') {
-                return { prefix: 'g', label: 'global' };
+                return { prefix: 'g', label: 'global variable' };
             }
-            return { prefix: 's', label: 'static' };
+            return { prefix: 's', label: 'static variable' };
         default:
             return undefined;
     }
@@ -368,7 +368,7 @@ const variablePrefix: Rule = (ctx) => {
                 }
                 for (const n of decl.names) {
                     if (n.kind === 'word' && !new RegExp(`^(?:${cls.codes.join('|')})[A-Z]`).test(n.text)) {
-                        out.push(rangeOf(n, `Member '${n.text}' of type ${decl.typeText} should start with the type prefix '${cls.codes[0]}' followed by an upper-case letter, e.g. '${cls.codes[0]}${capitalise(n.text)}' (guideline 6.1).`));
+                        out.push(rangeOf(n, `Member '${n.text}' of type ${decl.typeText} should start with the type prefix '${cls.codes[0]}' followed by an upper-case letter, e.g. '${cls.codes[0]}${capitalise(n.text)}'.`));
                     }
                 }
             }
@@ -377,24 +377,42 @@ const variablePrefix: Rule = (ctx) => {
     return out;
 };
 
+/** Type prefix -> readable type name, for explaining a wrong prefix. */
+const CODE_TYPES: Record<string, string> = {
+    b: 'Bool', x: 'Bool', by: 'Byte', w: 'Word', dw: 'DWord', lw: 'LWord',
+    si: 'SInt', usi: 'USInt', i: 'Int', ui: 'UInt', di: 'DInt', udi: 'UDInt', li: 'LInt', uli: 'ULInt',
+    t: 'Time', lt: 'LTime', r: 'Real', lr: 'LReal', d: 'Date', c: 'Char', wc: 'WChar', s: 'String', ws: 'WString',
+};
+
 function checkName(n: Token, decl: Declaration, cls: TypeClass, prefix: string, label: string): Finding | undefined {
     const name = n.text;
     let re: RegExp;
-    let expected: string;
     if (cls.kind === 'elementary') {
         re = new RegExp(`^${prefix}(?:${cls.codes.join('|')})[A-Z]`);
-        expected = `'${prefix}' + type prefix '${cls.codes[0]}' + Name, e.g. '${prefix}${cls.codes[0]}${capitalise(name)}'`;
     } else if (cls.kind === 'complex') {
         re = new RegExp(`^${prefix}[A-Z]`);
-        expected = `'${prefix}' + Name without type prefix (complex type), e.g. '${prefix}${capitalise(name)}'`;
     } else {
         re = new RegExp(`^${prefix}[a-z]*[A-Z]`);
-        expected = `'${prefix}' + type prefix + Name`;
     }
     if (re.test(name)) {
         return undefined;
     }
-    return rangeOf(n, `The ${label} ${decl.typeText || ''} variable '${name}' should be named ${expected} (guideline 4.1.1.1, 6.1).`.replace(/  +/g, ' '));
+    // the part after the lower-case prefix, used for the suggestion ('qltRemainingTime' -> 'RemainingTime')
+    const m = /^([a-z]*)([A-Z].*)$/.exec(name);
+    const found = m ? m[1] : '';
+    const base = m ? m[2] : capitalise(name);
+    const what = `${label[0].toUpperCase()}${label.slice(1)} '${name}'`;
+    const type = decl.typeText || 'this type';
+    if (cls.kind === 'elementary') {
+        const want = prefix + cls.codes[0];
+        const foundCode = found.startsWith(prefix) ? found.slice(prefix.length) : '';
+        const why = found === '' ? 'no prefix found' : CODE_TYPES[foundCode] ? `'${foundCode}' is the prefix for ${CODE_TYPES[foundCode]}` : `found '${found}'`;
+        return rangeOf(n, `${what} has type ${type}: use the prefix '${want}' (${why}), e.g. '${want}${base}'.`);
+    }
+    if (cls.kind === 'complex') {
+        return rangeOf(n, `${what} has the complex type ${type}: use the prefix '${prefix}' followed by an upper-case letter, e.g. '${prefix}${base}'.`);
+    }
+    return rangeOf(n, `${what} should start with '${prefix}' followed by a type prefix and an upper-case letter.`);
 }
 
 const POU_PREFIX: Record<string, { prefix: string; label: string }> = {
@@ -416,7 +434,7 @@ const pouPrefix: Rule = (ctx) => {
             rule = b.modifiers.includes('UNION') ? { prefix: 'u', label: 'Union' } : { prefix: 't', label: 'Data type' };
         }
         if (rule && !new RegExp(`^${rule.prefix}[A-Z0-9]`).test(b.name)) {
-            out.push(rangeOf(b.nameToken, `${rule.label} '${b.name}' should be prefixed with '${rule.prefix}', e.g. '${rule.prefix}${capitalise(b.name)}' (guideline 3.3).`));
+            out.push(rangeOf(b.nameToken, `${rule.label} '${b.name}' should be prefixed with '${rule.prefix}', e.g. '${rule.prefix}${capitalise(b.name)}'.`));
         }
     }
     return out;
@@ -434,7 +452,7 @@ const noUnderscoreInNames: Rule = (ctx) => {
         }
         for (const n of names) {
             if (n.text.replace(/^"|"$/g, '').includes('_')) {
-                out.push(rangeOf(n, `'${n.text}' contains an underscore; use CamelCase names (guideline 6.1).`));
+                out.push(rangeOf(n, `'${n.text}' contains an underscore; use CamelCase names.`));
             }
         }
     }
@@ -446,7 +464,7 @@ const missingHeader: Rule = (ctx) => {
     if (!first || first.kind === 'blockComment') {
         return [];
     }
-    return [{ ...rangeOf(first, ''), message: 'The source file should start with the header comment (title, version table, functionality) of guideline 4.1.1.1.' }];
+    return [{ ...rangeOf(first, ''), message: 'The source file should start with the header comment (title, version table, functionality).' }];
 };
 
 export const RULES: Record<RuleId, Rule> = {

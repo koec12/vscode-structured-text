@@ -8,7 +8,7 @@ import { documentSymbols, foldingRanges, type SymbolKindName, type SymbolNode } 
 import { parseStructure } from './language/structure';
 import { FORMATTER_FIXABLE, lint, type LintDiagnostic, type RuleId } from './lint';
 
-const DIAGNOSTIC_SOURCE = 'st-guideline';
+const DIAGNOSTIC_SOURCE = 'structured-text';
 
 let output: vscode.OutputChannel | undefined;
 

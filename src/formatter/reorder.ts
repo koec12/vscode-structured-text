@@ -1,5 +1,5 @@
 /**
- * Optional reordering of VAR sections (guideline 4.1.1.2.2):
+ * Optional reordering of VAR sections:
  * VAR CONSTANT, VAR_INPUT, VAR_OUTPUT, VAR_IN_OUT, VAR, VAR_TEMP.
  * Operates on the source text; line comments / pragmas directly above a
  * section header (no blank line in between) move with the section.

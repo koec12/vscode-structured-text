@@ -18,5 +18,5 @@ x                                       := Max(a, b) + Abs(-c) * Sqrt(d);
 aFb[i]
     (
     ibIn     := x,
-    ibEnable := true
+    ibEnable := True
     );

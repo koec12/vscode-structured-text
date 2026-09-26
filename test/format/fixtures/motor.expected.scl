@@ -34,7 +34,7 @@ REGION Handle IF (inputs)
     "gDb".bRunning                      := #sTimer.Q;
     Case #sData.iCount Of
         1:
-            #sData.bDone                := true;
+            #sData.bDone                := True;
         Else
             ;
     End_Case;

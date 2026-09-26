@@ -225,7 +225,7 @@ export class Layout {
         return breakBefore;
     }
 
-    /** Calls with named arguments that get the guideline 4.1.1.2.6/7 layout. */
+    /** Calls with named arguments that get the one-argument-per-line layout. */
     private findLayoutCalls(): { open: number; close: number; commas: number[] }[] {
         const { tokens, a, o } = this;
         const result: { open: number; close: number; commas: number[] }[] = [];
@@ -280,7 +280,7 @@ export class Layout {
                 continue;
             }
             const multiLine = tokens[p].line !== tokens[close].line || callee.line !== tokens[p].line;
-            const expandAlways = o.callStyle === 'guideline-always' && depthAt.get(p) === 0 && commas.length + 1 >= o.callExpandMinArgs;
+            const expandAlways = o.callStyle === 'always' && depthAt.get(p) === 0 && commas.length + 1 >= o.callExpandMinArgs;
             if (multiLine || expandAlways) {
                 result.push({ open: p, close, commas });
             }
@@ -852,7 +852,7 @@ export class Layout {
     private alignRun(run: Line[]): void {
         const { o } = this;
         if (o.alignAssignments) {
-            // the global column applies to statements; named call arguments align among themselves (guideline 4.1.1.2.7)
+            // the global column applies to statements; named call arguments align among themselves
             if (o.assignmentAlignColumn > 0 && run[0].runKey.endsWith('|stmt')) {
                 for (const l of run) {
                     const target = o.assignmentAlignColumn - 1 - this.width(l.indent);
@@ -876,7 +876,7 @@ export class Layout {
 
     private assemble(lines: Line[], eol: string): string {
         const { o } = this;
-        // exactly one blank line between VAR sections (guideline 4.1.1.2.2)
+        // exactly one blank line between VAR sections
         if (o.blankLineBetweenVarSections) {
             for (let k = 0; k < lines.length; k++) {
                 if (!isVarKeyword(lines[k].firstUpper)) {

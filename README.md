@@ -3,10 +3,10 @@
 Language support for PLC programming in **IEC 61131-3 Structured Text** (CODESYS / TwinCAT flavour, `.st`) and **Siemens SCL** (TIA Portal, `.scl`):
 
 - **Syntax highlighting** for both dialects
-- **Formatter** that follows the *Structured Text Programming in CodeSys 3.5 (and TwinCat XAE)* guideline (rev. A1)
-- **Lint**: guideline violations reported as diagnostics
+- **Formatter** for a consistent code layout (indentation, casing, alignment)
+- **Lint**: coding convention violations reported as diagnostics
 - **Outline, breadcrumbs and folding**
-- **Snippets** based on the guideline's templates
+- **Snippets** for file headers, POU skeletons and common patterns
 
 ## Syntax highlighting
 
@@ -33,18 +33,18 @@ Run **Format Document** (`Shift+Alt+F`), **Format Selection**, or enable `editor
 }
 ```
 
-| Rule | Guideline |
-|---|---|
-| Block indentation for IF / CASE / FOR / WHILE / REPEAT / VAR / STRUCT / TYPE / REGION. VAR sections and code stay at column 0 inside a POU (`indentPouBody` changes this) | 4.1.1.2.5 |
-| CASE labels are indented one level and their statements two levels. The code after a label moves to its own line; a trailing comment stays on the label line | 4.1.1.2.4, 4.1.1.2.12 |
-| One statement per line. `IF a THEN b := 1; END_IF` becomes three lines | 4.1.1.2.1 |
-| Code keywords `If / ElsIf / End_If`, `And / Not` (or lower case). Declaration keywords `VAR_INPUT / END_VAR` UPPER. Data types `Bool / LReal / LTime`. Built-ins `Abs / Sqrt / LTime_To_LInt` | 4.1.1.2, 4.1.1.2.2 |
-| `:=` of every assignment statement vertically aligned on one column (41 by default, as in the guideline's examples). Named call arguments align within their call | 4.1.1.2.1 |
-| Declarations laid out in three columns: name, `: Type := init;`, `//comment` | 4.1.1.2.2 |
-| Exactly one blank line between VAR sections. Optional reordering into VAR CONSTANT, VAR_INPUT, VAR_OUTPUT, VAR_IN_OUT, VAR, VAR_TEMP | 4.1.1.2.2 |
-| Multi-line calls with named arguments are laid out like the guideline's examples (below) | 4.1.1.2.6, 4.1.1.2.7 |
-| Consistent spacing around operators, commas and brackets. Blank lines are limited, trailing whitespace is removed, and the file's line endings are kept | |
-| Block comments (e.g. the header with its version table) are never re-wrapped | 4.1.1.1 |
+| Formatting rule |
+|---|
+| Block indentation for IF / CASE / FOR / WHILE / REPEAT / VAR / STRUCT / TYPE / REGION. VAR sections and code stay at column 0 inside a POU (`indentPouBody` changes this) |
+| CASE labels are indented one level and their statements two levels. The code after a label moves to its own line; a trailing comment stays on the label line |
+| One statement per line. `IF a THEN b := 1; END_IF` becomes three lines |
+| Code keywords `If / Elsif / End_If`, `And / Not` (or lower case). Declaration keywords `VAR_INPUT / END_VAR` UPPER. Data types and type definitions `Bool / LReal / LTime / Array[..] Of / Pointer To`. Literals `True / False`. Built-ins `Abs / Sqrt / LTime_To_LInt` |
+| `:=` of every assignment statement vertically aligned on one column (41 by default). Named call arguments align within their call |
+| Declarations laid out in three columns: name, `: Type := init;`, `//comment` |
+| Exactly one blank line between VAR sections. Optional reordering into VAR CONSTANT, VAR_INPUT, VAR_OUTPUT, VAR_IN_OUT, VAR, VAR_TEMP |
+| Multi-line calls with named arguments get one argument per line, with the parentheses on their own lines (below) |
+| Consistent spacing around operators, commas and brackets. Blank lines are limited, trailing whitespace is removed, and the file's line endings are kept |
+| Block comments (e.g. the header with its version table) are never re-wrapped |
 
 ```
 sFilter( //Filter Analogue Input          sFilter
@@ -63,10 +63,10 @@ ilrSubstituteValue := 0.0);          ─►       ilrInput           := trY,
 |---|---|---|
 | `enable` | `true` | Enable the formatter |
 | `keywordCase` | `pascal` | `pascal` \| `lower` \| `upper` \| `preserve`: control statements and operator words |
-| `declarationKeywordCase` | `upper` | FUNCTION_BLOCK, VAR_INPUT, END_VAR, STRUCT, ARRAY … OF, BEGIN |
-| `dataTypeCase` | `pascal` | Elementary data types |
+| `declarationKeywordCase` | `upper` | FUNCTION_BLOCK, VAR_INPUT, END_VAR, STRUCT, BEGIN |
+| `dataTypeCase` | `pascal` | Data types and type definitions (`Array … Of`, `Pointer To`, `Reference To`) |
 | `builtinFunctionCase` | `pascal` | Built-in and conversion functions (only when called) |
-| `booleanLiteralCase` | `lower` | `true` / `false` |
+| `booleanLiteralCase` | `pascal` | `True` / `False` |
 | `indentPouBody` | `false` | Indent VAR sections and code inside a POU |
 | `splitStatements` | `true` | One statement per line |
 | `alignAssignments` | `true` | Align `:=` in consecutive assignments |
@@ -76,10 +76,10 @@ ilrSubstituteValue := 0.0);          ─►       ilrInput           := trY,
 | `declarationMaxColumn` | `48` | Maximum column for the `:` of declarations |
 | `alignTrailingComments` | `true` | Align trailing comments in aligned groups |
 | `blankLineBetweenVarSections` | `true` | One blank line between VAR sections |
-| `reorderVarSections` | `false` | Reorder VAR sections into the guideline order |
+| `reorderVarSections` | `false` | Reorder VAR sections to VAR CONSTANT, VAR_INPUT, VAR_OUTPUT, VAR_IN_OUT, VAR, VAR_TEMP |
 | `maxBlankLines` | `1` | Maximum number of consecutive blank lines |
-| `callStyle` | `guideline` | `guideline` (multi-line calls) \| `guideline-always` \| `preserve` |
-| `callExpandMinArgs` | `3` | Minimum named arguments for `guideline-always` |
+| `callStyle` | `multiline` | `multiline` (multi-line calls) \| `always` \| `preserve` |
+| `callExpandMinArgs` | `3` | Minimum named arguments for `always` |
 
 Indentation size and tabs vs. spaces come from the editor (`editor.tabSize`, `editor.insertSpaces`). The extension defaults these to 4 spaces for both languages.
 
@@ -87,21 +87,21 @@ Indentation size and tabs vs. spaces come from the editor (`editor.tabSize`, `ed
 
 Findings appear in the Problems view. For rules the formatter can fix, the quick fix *Format document to fix* is offered. Set severities with `structuredText.lint.rules` (`off` \| `hint` \| `information` \| `warning` \| `error`):
 
-| Rule | Default | Guideline |
-|---|---|---|
-| `keyword-case`: keyword casing differs from the formatter settings | warning | 4.1.1.2 |
-| `one-statement-per-line` | warning | 4.1.1.2.1 |
-| `var-section-order`: wrong order, or no blank line between VAR sections | warning | 4.1.1.2.2 |
-| `no-direct-address`: `%I` / `%Q` / `%M` used in code | warning | 4.1.1.1 |
-| `no-jump`: JMP / GOTO | warning | 4.1.1.2.2 |
-| `case-numeric-label`: plain numbers as CASE labels | warning | 4.1.1.2.4 |
-| `explicit-parentheses`: operators of different precedence mixed without parentheses | information | 4.1.1.2 |
-| `for-counter-modified`: FOR counter assigned in the loop body | warning | 4.1.1.2.11 |
-| `prefer-for-loop`: WHILE / REPEAT used | hint | 4.1.1.2.11 |
-| `variable-prefix`: Hungarian notation (memory prefix `i q iq s t c g gc`, then a type prefix such as `b by w dw i di r lr t lt s`, then an upper-case letter) | warning | 4.1.1.1, 6.1 |
-| `pou-prefix`: `fb` / `fc` / `prg` for POUs, `t` for types, `u` for unions | warning | 3.3 |
-| `no-underscore-in-names`: use CamelCase | hint | 6.1 |
-| `missing-header`: the file doesn't start with a header comment | off | 4.1.1.1 |
+| Rule | Default |
+|---|---|
+| `keyword-case`: keyword casing differs from the formatter settings | warning |
+| `one-statement-per-line` | warning |
+| `var-section-order`: wrong order, or no blank line between VAR sections | warning |
+| `no-direct-address`: `%I` / `%Q` / `%M` used in code | warning |
+| `no-jump`: JMP / GOTO | warning |
+| `case-numeric-label`: plain numbers as CASE labels | warning |
+| `explicit-parentheses`: operators of different precedence mixed without parentheses | information |
+| `for-counter-modified`: FOR counter assigned in the loop body | warning |
+| `prefer-for-loop`: WHILE / REPEAT used | hint |
+| `variable-prefix`: Hungarian notation (memory prefix `i q iq s t c g gc`, then a type prefix such as `b by w dw i di r lr t lt s`, then an upper-case letter) | warning |
+| `pou-prefix`: `fb` / `fc` / `prg` for POUs, `t` for types, `u` for unions | warning |
+| `no-underscore-in-names`: use CamelCase | hint |
+| `missing-header`: the file doesn't start with a header comment | off |
 
 More lint settings:
 - `structuredText.lint.enable`: turns lint on or off.
@@ -117,16 +117,16 @@ More lint settings:
 
 | Prefix | ST | SCL |
 |---|---|---|
-| `header` | Source file header with version table (4.1.1.1) | ✓ |
+| `header` | Source file header with version table | ✓ |
 | `fb`, `fc`, `prg` / `ob`, `db` | POU skeletons with sections in the mandated order | ✓ |
 | `method` | METHOD | |
-| `type`, `union` | STRUCT type (4.2), bit-access union (4.1.1.2.10) | `type` |
-| `fsm` | CASE state machine (4.1.1.2.12) | ✓ |
-| `edge`, `edgechange` | Edge detection (4.1.1.2.9) | `edge` |
-| `timing` | Timing with a time tick (4.1.1.2.8) | ✓ |
-| `fbcall`, `fccall` | Call layout (4.1.1.2.6/7) | `fbcall` |
+| `type`, `union` | STRUCT type, bit-access union | `type` |
+| `fsm` | CASE state machine | ✓ |
+| `edge`, `edgechange` | Edge detection | `edge` |
+| `timing` | Timing with a time tick | ✓ |
+| `fbcall`, `fccall` | Call layout | `fbcall` |
 | `if`, `ifelse`, `ifelsif`, `case`, `for` | Control structures | ✓ |
-| `section`, `summary`, `param`, `returns` | Documentation comments (4.1.1.2.3, 6.4, 6.5) | `section` |
+| `section`, `summary`, `param`, `returns` | Documentation comments | `section` |
 | `region` | | REGION block |
 
 ## Limitations

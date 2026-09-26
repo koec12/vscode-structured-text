@@ -1,7 +1,7 @@
 {
   "Source file header": {
     "prefix": "header",
-    "description": "Source file header with version table (guideline 4.1.1.1)",
+    "description": "Source file header with version table",
     "body": [
       "(*",
       "**©${CURRENT_YEAR} ${1:<Company>} - TITLE ='[V#01.01.01.03] ${2:Title}'**",
@@ -119,7 +119,7 @@
   },
   "Data type (struct)": {
     "prefix": "type",
-    "description": "SCL user defined STRUCT type (guideline 4.2)",
+    "description": "SCL user defined STRUCT type",
     "body": [
       "TYPE \"t${1:Name}\"",
       "VERSION : 0.1",
@@ -140,7 +140,7 @@
   },
   "Finite state machine": {
     "prefix": "fsm",
-    "description": "CASE based finite state machine (guideline 4.1.1.2.12)",
+    "description": "CASE based finite state machine",
     "body": [
       "//State machine",
       "Case #${1:siState} Of",
@@ -155,7 +155,7 @@
   },
   "Positive edge": {
     "prefix": "edge",
-    "description": "Positive edge detection (guideline 4.1.1.2.9)",
+    "description": "Positive edge detection",
     "body": [
       "#tb${1:Rx}   := #${2:RX} And Not #sb${1}; //positive edge",
       "#sb${1}   := #${2};",
@@ -166,7 +166,7 @@
   },
   "Timing": {
     "prefix": "timing",
-    "description": "Timing with a free running time tick (guideline 4.1.1.2.8)",
+    "description": "Timing with a free running time tick",
     "body": [
       "#tltTime      := #tltNow - #slt${1:Time};",
       "If (#tltTime >= ${2:LT#1s}) Then",
@@ -177,7 +177,7 @@
   },
   "Function block call": {
     "prefix": "fbcall",
-    "description": "Function block call layout (guideline 4.1.1.2.7)",
+    "description": "Function block call layout",
     "body": [
       "#${1:sInstance}",
       "    ( //${2:Comment}",
@@ -206,7 +206,7 @@
   },
   "Case": {
     "prefix": "case",
-    "description": "CASE statement - use constants as labels (guideline 4.1.1.2.4)",
+    "description": "CASE statement - use constants as labels",
     "body": [
       "Case #${1:siState} Of",
       "    #${2:ciConstant01}: //${3:Comment}",
@@ -216,7 +216,7 @@
   },
   "For": {
     "prefix": "for",
-    "description": "FOR loop (preferred loop, guideline 4.1.1.2.11)",
+    "description": "FOR loop",
     "body": [
       "For #${1:tiI} := ${2:1} To #${3:ciMax} Do",
       "    $0",
@@ -225,7 +225,7 @@
   },
   "Section comment": {
     "prefix": "section",
-    "description": "Code section documentation block (guideline 4.1.1.2.3)",
+    "description": "Code section documentation block",
     "body": [
       "(*",
       "---------------------------------------------------------------------------------------",
