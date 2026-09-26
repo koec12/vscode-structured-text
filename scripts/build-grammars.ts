@@ -178,7 +178,8 @@ function build(f: Flavour): Pattern {
         keywords: {
             patterns: [
                 { name: s('keyword.control'), match: words(control) },
-                { name: s('keyword.operator.word'), match: words(K.OPERATOR_KEYWORDS) },
+                { name: s('keyword.operator.logical'), match: words(K.LOGICAL_OPERATOR_KEYWORDS) },
+                { name: s('keyword.operator.arithmetic'), match: words(K.OPERATOR_KEYWORDS.filter((k) => !K.LOGICAL_OPERATOR_KEYWORDS.includes(k))) },
                 { name: s('storage.type.pou'), match: words(pouKeywords) },
                 { name: s('storage.modifier.var'), match: '(?i)\\b(?:VAR_[A-Z_]+|VAR|END_VAR)\\b' },
                 { name: s('storage.modifier'), match: words(modifiers) },
@@ -215,7 +216,8 @@ function build(f: Flavour): Pattern {
                 { name: s('keyword.operator.assignment'), match: ':=|=>|\\?=' },
                 { name: s('keyword.operator.comparison'), match: '<>|<=|>=|=|<|>' },
                 { name: s('keyword.operator.arithmetic'), match: '\\*\\*|[-+*/]' },
-                { name: s('keyword.operator'), match: '[&^]' },
+                { name: s('keyword.operator.logical'), match: '&' },
+                { name: s('keyword.operator.dereference'), match: '\\^' },
                 { name: s('punctuation.separator.range'), match: '\\.\\.' },
                 { name: s('punctuation.terminator.statement'), match: ';' },
                 { name: s('punctuation.separator'), match: '[,:.]' },

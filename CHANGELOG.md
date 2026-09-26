@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Distinct default colours for assignment (`:=`), comparison (`=`, `<>`, `<`, `>=`, …) and logical operators (`And`, `Or`, `Xor`, `Not`, `&`), with darker variants for light themes.
 - `Array`, `Of`, `Pointer`, `Reference` and `To` in type definitions follow the data type casing (Pascal by default).
 - `True` / `False` are Pascal case by default.
 - `ELSIF` is written `Elsif` in Pascal case.

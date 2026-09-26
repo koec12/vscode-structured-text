@@ -29,7 +29,7 @@ If (tltTime >= T#2s) Then
 //                                    ^^^^^ constant.numeric.decimal.st
 Elsif a And Not b Then
 // <----- keyword.control.st
-//      ^^^ keyword.operator.word.st
+//      ^^^ keyword.operator.logical.st
     ws := "wide $0041";
 //        ^^^^^^^^^^^^ string.quoted.double.st
 //              ^^^^^ constant.character.escape.st

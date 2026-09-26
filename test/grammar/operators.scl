@@ -1,0 +1,10 @@
+// SYNTAX TEST "source.siemens-scl" "operator scopes"
+#x := (#a >= #b) OR #c <> #d AND NOT #e;
+// ^^ keyword.operator.assignment.scl
+//        ^^ keyword.operator.comparison.scl
+//               ^^ keyword.operator.logical.scl
+//                     ^^ keyword.operator.comparison.scl
+//                           ^^^ keyword.operator.logical.scl
+//                               ^^^ keyword.operator.logical.scl
+{ S7_Optimized_Access := 'TRUE' }
+//                    ^^ meta.preprocessor.scl

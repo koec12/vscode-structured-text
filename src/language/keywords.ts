@@ -19,6 +19,8 @@ export const ST_CONTROL_KEYWORDS = ['__TRY', '__CATCH', '__FINALLY', '__ENDTRY']
 
 /** Operator words. */
 export const OPERATOR_KEYWORDS = ['AND', 'OR', 'XOR', 'NOT', 'MOD', 'AND_THEN', 'OR_ELSE'];
+/** Boolean / bitwise operator words (highlighted separately from MOD). */
+export const LOGICAL_OPERATOR_KEYWORDS = ['AND', 'OR', 'XOR', 'NOT', 'AND_THEN', 'OR_ELSE'];
 
 /** Program organisation units and other blocks, with their END_ forms. */
 export const POU_KEYWORDS = [
