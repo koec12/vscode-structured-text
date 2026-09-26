@@ -1,0 +1,467 @@
+{
+  "name": "vscode-structured-text",
+  "displayName": "Structured Text & SCL",
+  "description": "Syntax highlighting, guideline-based formatter, lint, outline, folding and snippets for IEC 61131-3 Structured Text (CODESYS / TwinCAT) and Siemens SCL.",
+  "version": "0.1.0",
+  "publisher": "koec12",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/koec12/vscode-structured-text"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Formatters",
+    "Linters",
+    "Snippets"
+  ],
+  "keywords": [
+    "IEC 61131-3",
+    "Structured Text",
+    "CODESYS",
+    "TwinCAT",
+    "SCL",
+    "Siemens",
+    "TIA Portal",
+    "PLC"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "languages": [
+      {
+        "id": "iec-st",
+        "aliases": [
+          "Structured Text (IEC 61131-3)",
+          "Structured Text",
+          "st"
+        ],
+        "extensions": [
+          ".st"
+        ],
+        "configuration": "./language-configuration/st.language-configuration.json"
+      },
+      {
+        "id": "siemens-scl",
+        "aliases": [
+          "Siemens SCL",
+          "SCL",
+          "scl"
+        ],
+        "extensions": [
+          ".scl"
+        ],
+        "configuration": "./language-configuration/scl.language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "iec-st",
+        "scopeName": "source.iec-st",
+        "path": "./syntaxes/st.tmLanguage.json"
+      },
+      {
+        "language": "siemens-scl",
+        "scopeName": "source.siemens-scl",
+        "path": "./syntaxes/scl.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "iec-st",
+        "path": "./snippets/st.code-snippets"
+      },
+      {
+        "language": "siemens-scl",
+        "path": "./snippets/scl.code-snippets"
+      }
+    ],
+    "configurationDefaults": {
+      "[iec-st]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true
+      },
+      "[siemens-scl]": {
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true
+      }
+    },
+    "configuration": {
+      "title": "Structured Text & SCL",
+      "properties": {
+        "structuredText.format.enable": {
+          "type": "boolean",
+          "default": true,
+          "scope": "language-overridable",
+          "description": "Enable the Structured Text / SCL document formatter."
+        },
+        "structuredText.format.keywordCase": {
+          "type": "string",
+          "enum": [
+            "pascal",
+            "lower",
+            "upper",
+            "preserve"
+          ],
+          "enumDescriptions": [
+            "If, ElsIf, End_If, And, Not (guideline 4.1.1.2)",
+            "if, elsif, end_if, and, not (guideline 4.1.1.2)",
+            "IF, ELSIF, END_IF - NOT guideline conformant, but the Siemens TIA convention",
+            "Leave the casing unchanged"
+          ],
+          "default": "pascal",
+          "scope": "language-overridable",
+          "description": "Casing of keywords in the code section (control statements and operator words)."
+        },
+        "structuredText.format.declarationKeywordCase": {
+          "type": "string",
+          "enum": [
+            "upper",
+            "pascal",
+            "lower",
+            "preserve"
+          ],
+          "default": "upper",
+          "scope": "language-overridable",
+          "description": "Casing of POU and declaration keywords (FUNCTION_BLOCK, VAR_INPUT, END_VAR, STRUCT, ARRAY ... OF, BEGIN)."
+        },
+        "structuredText.format.dataTypeCase": {
+          "type": "string",
+          "enum": [
+            "pascal",
+            "upper",
+            "lower",
+            "preserve"
+          ],
+          "default": "pascal",
+          "scope": "language-overridable",
+          "description": "Casing of elementary data types (Bool, LReal, LTime / BOOL, LREAL, LTIME)."
+        },
+        "structuredText.format.builtinFunctionCase": {
+          "type": "string",
+          "enum": [
+            "pascal",
+            "lower",
+            "upper",
+            "preserve"
+          ],
+          "default": "pascal",
+          "scope": "language-overridable",
+          "description": "Casing of built-in functions such as Abs, Sqrt, Int_To_Word (only recased when used as a call)."
+        },
+        "structuredText.format.booleanLiteralCase": {
+          "type": "string",
+          "enum": [
+            "lower",
+            "pascal",
+            "upper",
+            "preserve"
+          ],
+          "default": "lower",
+          "scope": "language-overridable",
+          "description": "Casing of the literals TRUE and FALSE."
+        },
+        "structuredText.format.indentPouBody": {
+          "type": "boolean",
+          "default": false,
+          "scope": "language-overridable",
+          "description": "Indent VAR sections and code inside a POU (the guideline keeps them at column 0)."
+        },
+        "structuredText.format.splitStatements": {
+          "type": "boolean",
+          "default": true,
+          "scope": "language-overridable",
+          "description": "Put every statement on its own line and expand one-line IF/CASE/FOR/WHILE constructs (guideline 4.1.1.2.1)."
+        },
+        "structuredText.format.alignAssignments": {
+          "type": "boolean",
+          "default": true,
+          "scope": "language-overridable",
+          "description": "Vertically align ':=' in consecutive assignment lines (guideline 4.1.1.2.1)."
+        },
+        "structuredText.format.assignmentAlignColumn": {
+          "type": "integer",
+          "default": 0,
+          "minimum": 0,
+          "scope": "language-overridable",
+          "description": "0 = align ':=' per run of consecutive assignments. A positive number aligns every ':=' in the code section to this (1-based) column when the left-hand side fits."
+        },
+        "structuredText.format.assignmentMaxColumn": {
+          "type": "integer",
+          "default": 60,
+          "minimum": 1,
+          "scope": "language-overridable",
+          "description": "Assignments whose left-hand side would push ':=' beyond this column are not aligned (prevents one long line from pushing a whole run to the right)."
+        },
+        "structuredText.format.alignDeclarations": {
+          "type": "boolean",
+          "default": true,
+          "scope": "language-overridable",
+          "description": "Lay out declarations in three aligned columns: name, type and comment (guideline 4.1.1.2.2)."
+        },
+        "structuredText.format.declarationMaxColumn": {
+          "type": "integer",
+          "default": 48,
+          "minimum": 1,
+          "scope": "language-overridable",
+          "description": "Maximum column of the ':' in aligned declarations. Longer names are not padded."
+        },
+        "structuredText.format.alignTrailingComments": {
+          "type": "boolean",
+          "default": true,
+          "scope": "language-overridable",
+          "description": "Align trailing '//' comments of aligned declaration and assignment runs."
+        },
+        "structuredText.format.blankLineBetweenVarSections": {
+          "type": "boolean",
+          "default": true,
+          "scope": "language-overridable",
+          "description": "Separate consecutive VAR sections with exactly one blank line (guideline 4.1.1.2.2)."
+        },
+        "structuredText.format.reorderVarSections": {
+          "type": "boolean",
+          "default": false,
+          "scope": "language-overridable",
+          "description": "Reorder VAR sections to VAR CONSTANT, VAR_INPUT, VAR_OUTPUT, VAR_IN_OUT, VAR, VAR_TEMP (guideline 4.1.1.2.2)."
+        },
+        "structuredText.format.maxBlankLines": {
+          "type": "integer",
+          "default": 1,
+          "minimum": 0,
+          "scope": "language-overridable",
+          "description": "Maximum number of consecutive blank lines to keep."
+        },
+        "structuredText.format.callStyle": {
+          "type": "string",
+          "enum": [
+            "guideline",
+            "guideline-always",
+            "preserve"
+          ],
+          "enumDescriptions": [
+            "Multi-line calls with named arguments are laid out as in guideline 4.1.1.2.6/7",
+            "Additionally expand single-line calls with at least 'callExpandMinArgs' named arguments",
+            "Keep the line structure of calls"
+          ],
+          "default": "guideline",
+          "scope": "language-overridable",
+          "description": "Layout of function / function block calls with named arguments."
+        },
+        "structuredText.format.callExpandMinArgs": {
+          "type": "integer",
+          "default": 3,
+          "minimum": 1,
+          "scope": "language-overridable",
+          "description": "Minimum number of named arguments before a call is expanded when callStyle is 'guideline-always'."
+        },
+        "structuredText.lint.enable": {
+          "type": "boolean",
+          "default": true,
+          "scope": "language-overridable",
+          "description": "Report programming-guideline violations as diagnostics."
+        },
+        "structuredText.lint.allowCfcStyleIo": {
+          "type": "boolean",
+          "default": true,
+          "scope": "language-overridable",
+          "description": "Accept all-uppercase input/output names of up to 8 characters (CFC style, IEC PAS 63131 terminal names such as XGH or PTDH) - guideline 4.1.1.1.3."
+        },
+        "structuredText.lint.checkStructMembers": {
+          "type": "boolean",
+          "default": false,
+          "scope": "language-overridable",
+          "description": "Also check type prefixes of STRUCT/UNION members (the guideline allows omitting them for exposed structures)."
+        },
+        "structuredText.lint.rules": {
+          "type": "object",
+          "scope": "language-overridable",
+          "description": "Severity per lint rule.",
+          "default": {},
+          "properties": {
+            "keyword-case": {
+              "type": "string",
+              "enum": [
+                "off",
+                "hint",
+                "information",
+                "warning",
+                "error"
+              ],
+              "default": "warning",
+              "description": "Keyword casing differs from the configured casing (guideline 4.1.1.2)."
+            },
+            "one-statement-per-line": {
+              "type": "string",
+              "enum": [
+                "off",
+                "hint",
+                "information",
+                "warning",
+                "error"
+              ],
+              "default": "warning",
+              "description": "Several statements on one line (guideline 4.1.1.2.1)."
+            },
+            "var-section-order": {
+              "type": "string",
+              "enum": [
+                "off",
+                "hint",
+                "information",
+                "warning",
+                "error"
+              ],
+              "default": "warning",
+              "description": "VAR sections out of order or not separated by a blank line (guideline 4.1.1.2.2)."
+            },
+            "no-direct-address": {
+              "type": "string",
+              "enum": [
+                "off",
+                "hint",
+                "information",
+                "warning",
+                "error"
+              ],
+              "default": "warning",
+              "description": "Absolute addresses (%I, %Q, %M) used in code (guideline 4.1.1.1 Robust Programming)."
+            },
+            "no-jump": {
+              "type": "string",
+              "enum": [
+                "off",
+                "hint",
+                "information",
+                "warning",
+                "error"
+              ],
+              "default": "warning",
+              "description": "JMP / GOTO used (guideline 4.1.1.2.2)."
+            },
+            "case-numeric-label": {
+              "type": "string",
+              "enum": [
+                "off",
+                "hint",
+                "information",
+                "warning",
+                "error"
+              ],
+              "default": "warning",
+              "description": "Plain numbers used as CASE labels instead of constants (guideline 4.1.1.2.4)."
+            },
+            "explicit-parentheses": {
+              "type": "string",
+              "enum": [
+                "off",
+                "hint",
+                "information",
+                "warning",
+                "error"
+              ],
+              "default": "information",
+              "description": "Operators of different precedence mixed without parentheses (guideline 4.1.1.2)."
+            },
+            "for-counter-modified": {
+              "type": "string",
+              "enum": [
+                "off",
+                "hint",
+                "information",
+                "warning",
+                "error"
+              ],
+              "default": "warning",
+              "description": "FOR loop counter assigned inside the loop (guideline 4.1.1.2.11)."
+            },
+            "prefer-for-loop": {
+              "type": "string",
+              "enum": [
+                "off",
+                "hint",
+                "information",
+                "warning",
+                "error"
+              ],
+              "default": "hint",
+              "description": "WHILE / REPEAT used; prefer FOR (guideline 4.1.1.2.11)."
+            },
+            "variable-prefix": {
+              "type": "string",
+              "enum": [
+                "off",
+                "hint",
+                "information",
+                "warning",
+                "error"
+              ],
+              "default": "warning",
+              "description": "Variable name does not follow the Hungarian notation prefix rules (guideline 4.1.1.1, 6.1)."
+            },
+            "pou-prefix": {
+              "type": "string",
+              "enum": [
+                "off",
+                "hint",
+                "information",
+                "warning",
+                "error"
+              ],
+              "default": "warning",
+              "description": "POU / type name lacks the fb / fc / prg / t / u prefix (guideline 3.3)."
+            },
+            "no-underscore-in-names": {
+              "type": "string",
+              "enum": [
+                "off",
+                "hint",
+                "information",
+                "warning",
+                "error"
+              ],
+              "default": "hint",
+              "description": "Underscore in a declared name; use CamelCase (guideline 6.1)."
+            },
+            "missing-header": {
+              "type": "string",
+              "enum": [
+                "off",
+                "hint",
+                "information",
+                "warning",
+                "error"
+              ],
+              "default": "off",
+              "description": "File does not start with the source file header comment (guideline 4.1.1.1)."
+            }
+          }
+        }
+      }
+    }
+  },
+  "scripts": {
+    "gen:grammars": "tsx scripts/build-grammars.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "npm run gen:grammars && npm run typecheck && node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "test": "vitest run",
+    "test:grammar": "vscode-tmgrammar-test \"test/grammar/**/*.st\" \"test/grammar/**/*.scl\"",
+    "package": "vsce package",
+    "vscode:prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.4",
+    "@types/vscode": "1.85.0",
+    "@vscode/vsce": "^4.0.0",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.2",
+    "vscode-tmgrammar-test": "^0.1.3"
+  },
+  "dependencies": {
+    "diff": "^9.0.0"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "comments": {
+    "lineComment": "//",
+    "blockComment": [
+      "(*",
+      "*)"
+    ]
+  },
+  "brackets": [
+    [
+      "(",
+      ")"
+    ],
+    [
+      "[",
+      "]"
+    ]
+  ],
+  "autoClosingPairs": [
+    {
+      "open": "(",
+      "close": ")"
+    },
+    {
+      "open": "[",
+      "close": "]"
+    },
+    {
+      "open": "{",
+      "close": "}",
+      "notIn": [
+        "string",
+        "comment"
+      ]
+    },
+    {
+      "open": "'",
+      "close": "'",
+      "notIn": [
+        "string",
+        "comment"
+      ]
+    },
+    {
+      "open": "\"",
+      "close": "\"",
+      "notIn": [
+        "string",
+        "comment"
+      ]
+    }
+  ],
+  "surroundingPairs": [
+    [
+      "(",
+      ")"
+    ],
+    [
+      "[",
+      "]"
+    ],
+    [
+      "{",
+      "}"
+    ],
+    [
+      "'",
+      "'"
+    ],
+    [
+      "\"",
+      "\""
+    ]
+  ],
+  "indentationRules": {
+    "increaseIndentPattern": {
+      "pattern": "^\\s*(?:(?:IF|ELSIF)\\b.*\\bTHEN\\b|ELSE\\b|CASE\\b.*\\bOF\\b|(?:FOR|WHILE)\\b.*\\bDO\\b|REPEAT\\b|VAR(?:_[A-Z_]+)?\\b|STRUCT\\b|UNION\\b|TYPE\\b|REGION\\b|[A-Za-z_#\\\"][\\w.#\\\"]*(?:\\s*(?:,|\\.\\.)\\s*[\\w.#\\\"-]+)*\\s*:(?!=)\\s*(?://.*)?$)(?!.*\\bEND_)",
+      "flags": "i"
+    },
+    "decreaseIndentPattern": {
+      "pattern": "^\\s*(?:END_[A-Z_]+|ELSIF|ELSE|UNTIL)\\b",
+      "flags": "i"
+    }
+  },
+  "folding": {
+    "markers": {
+      "start": {
+        "pattern": "^\\s*(?:\\{\\s*region\\b|//\\s*#?region\\b)",
+        "flags": "i"
+      },
+      "end": {
+        "pattern": "^\\s*(?:\\{\\s*endregion\\b|//\\s*#?endregion\\b)",
+        "flags": "i"
+      }
+    }
+  }
+}
