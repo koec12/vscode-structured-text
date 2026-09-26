@@ -7,11 +7,14 @@ import { SCL, ST } from '../src/language/dialect';
 
 const dir = 'test/format/fixtures';
 const dialectOf = (f: string) => (f.endsWith('.scl') ? SCL : ST);
-const fmt = (src: string, opts = {}, d = ST) => {
+/** Format with the real defaults (used by the golden fixtures). */
+const fmtDefault = (src: string, opts = {}, d = ST) => {
     const r = format(src, d, opts);
     expect(r.error).toBeUndefined();
     return r.text;
 };
+/** Format with per-run ':=' alignment, so spacing tests stay readable. */
+const fmt = (src: string, opts = {}, d = ST) => fmtDefault(src, { assignmentAlignColumn: 0, ...opts }, d);
 
 describe('golden fixtures', () => {
     for (const f of readdirSync(dir).filter((x) => x.includes('.input.'))) {
@@ -19,19 +22,19 @@ describe('golden fixtures', () => {
         const input = readFileSync(join(dir, f), 'utf8');
         const expected = readFileSync(join(dir, f.replace('.input.', '.expected.')), 'utf8');
         it(`${f} matches expected output`, () => {
-            expect(fmt(input, {}, d)).toBe(expected);
+            expect(fmtDefault(input, {}, d)).toBe(expected);
         });
         it(`${f} is idempotent`, () => {
-            expect(fmt(expected, {}, d)).toBe(expected);
+            expect(fmtDefault(expected, {}, d)).toBe(expected);
         });
         it(`${f} survives whitespace mangling`, () => {
             // add random extra spaces / indentation - result must still verify and be stable
             let seed = 42;
             const rnd = () => ((seed = (seed * 1103515245 + 12345) % 2 ** 31) / 2 ** 31);
             const mangled = input.replace(/ +/g, (m) => m + ' '.repeat(Math.floor(rnd() * 3))).replace(/^/gm, () => ' '.repeat(Math.floor(rnd() * 5)));
-            const out = fmt(mangled, {}, d);
+            const out = fmtDefault(mangled, {}, d);
             expect(verifyEquivalent(mangled, out, d).ok).toBe(true);
-            expect(fmt(out, {}, d)).toBe(out);
+            expect(fmtDefault(out, {}, d)).toBe(out);
         });
     }
 });
@@ -48,6 +51,18 @@ describe('options', () => {
     });
     it('does not recase user identifiers that look like conversions or built-ins without call', () => {
         expect(fmt('max := MAP_TO_OUTPUT(a);\n')).toBe('max := MAP_TO_OUTPUT(a);\n');
+    });
+    it('aligns assignment statements on column 41 by default', () => {
+        expect(fmtDefault('a := 1;\nIF a THEN\nlonger := 2;\nEND_IF\n')).toBe(
+            'a                                       := 1;\nIf a Then\n    longer                              := 2;\nEnd_If\n',
+        );
+    });
+    it('gives a single space when the left-hand side does not fit the column', () => {
+        const lhs = 'sAVeryLongStructureName.sAnotherMember.sMember.iValue';
+        expect(fmtDefault(`${lhs} := 2;\n`)).toBe(`${lhs} := 2;\n`);
+    });
+    it('aligns named call arguments per call, not on the global column', () => {
+        expect(fmtDefault('sFb(a := 1,\nlonger := 2);\n')).toBe('sFb\n    (\n    a      := 1,\n    longer := 2\n    );\n');
     });
     it('fixed assignment column', () => {
         expect(fmt('a := 1;\nlonger := 2;\n', { assignmentAlignColumn: 12 })).toBe('a          := 1;\nlonger     := 2;\n');

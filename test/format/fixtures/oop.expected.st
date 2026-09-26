@@ -22,14 +22,14 @@ VAR_TEMP
     tbRx : Bool;    //Initialize filter
 END_VAR;
 BEGIN
-tbRx := RX And Not sbRx; //tbRx is positive edge for RX
-sbRx := RX;              //Save RX in sbRx to disable edge as long as RX stays true.
+tbRx                                    := RX And Not sbRx; //tbRx is positive edge for RX
+sbRx                                    := RX;              //Save RX in sbRx to disable edge as long as RX stays true.
 {IF defined (DEBUG)}
 If tbRx Then
     This^.mLog(sMsg := 'edge');
 End_If;
 {END_IF}
-spData := __New(tData);
+spData                                  := __New(tData);
 sRef REF= siValue;
 If ((tbyXa And 16#01) <> 16#00) Then  //Test for positive edge on bit zero in the byte
     sbAlarm S= true;
@@ -38,7 +38,7 @@ METHOD PRIVATE mLog : Bool
 VAR_INPUT
     sMsg : String(80);
 END_VAR
-mLog := true;
+mLog                                    := true;
 END_METHOD
 
 PROPERTY pbRunning : Bool

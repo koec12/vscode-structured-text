@@ -12,29 +12,29 @@ END_VAR
 Case siState Of
     ciInitState: //Initial State of EUC
         If bHigh Then
-            siState := ciHigh;
+            siState                     := ciHigh;
         ElsIf bLow Then
-            siState := ciLow;
+            siState                     := ciLow;
         End_If
     // EUC in Low state
     ciLow:
         If bSwitch Then
-            siState := ciTransitHigh;
+            siState                     := ciTransitHigh;
         End_If
     ciTransitHigh, ciTransitLow:
-        x := 1;
-        y := 22;
+        x                               := 1;
+        y                               := 22;
     Else
-        siState := ciInitState;
+        siState                         := ciInitState;
 End_Case;
 Repeat
-    i := i + 1;
+    i                                   := i + 1;
 Until i > 10
 End_Repeat;
 While a And
         b Do
-    x := -1;
+    x                                   := -1;
 End_While
 For tiII := tiBufferLength - 1 To 1 By -1 Do
-    srBuffer[tiII + 1] := srBuffer[tiII];
+    srBuffer[tiII + 1]                  := srBuffer[tiII];
 End_For;

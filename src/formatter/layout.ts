@@ -852,7 +852,8 @@ export class Layout {
     private alignRun(run: Line[]): void {
         const { o } = this;
         if (o.alignAssignments) {
-            if (o.assignmentAlignColumn > 0) {
+            // the global column applies to statements; named call arguments align among themselves (guideline 4.1.1.2.7)
+            if (o.assignmentAlignColumn > 0 && run[0].runKey.endsWith('|stmt')) {
                 for (const l of run) {
                     const target = o.assignmentAlignColumn - 1 - this.width(l.indent);
                     l.pad = Math.max(1, target - l.left.length);

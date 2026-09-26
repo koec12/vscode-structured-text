@@ -183,10 +183,10 @@
         },
         "structuredText.format.assignmentAlignColumn": {
           "type": "integer",
-          "default": 0,
+          "default": 41,
           "minimum": 0,
           "scope": "language-overridable",
-          "description": "0 = align ':=' per run of consecutive assignments. A positive number aligns every ':=' in the code section to this (1-based) column when the left-hand side fits."
+          "description": "1-based column at which every ':=' of an assignment statement is aligned (the guideline aligns the code section on one column; 41 is a multiple of 4 + 1). Assignments whose left-hand side does not fit get a single space. 0 = align ':=' per run of consecutive assignments instead. Named call arguments are always aligned per call."
         },
         "structuredText.format.assignmentMaxColumn": {
           "type": "integer",
@@ -464,5 +464,6 @@
   },
   "dependencies": {
     "diff": "^9.0.0"
-  }
+  },
+  "license": "MIT"
 }

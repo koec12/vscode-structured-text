@@ -100,9 +100,11 @@ describe('extension wiring', () => {
     });
 
     it('formats a document with editor indentation settings', () => {
+        settings['format.assignmentAlignColumn'] = 0;
         const src = 'IF a THEN\nx:=1;\nEND_IF\n';
         const edits = registered.format.provideDocumentFormattingEdits(doc(src), { tabSize: 2, insertSpaces: true });
         expect(applyEdits(src, edits)).toBe('If a Then\n  x := 1;\nEnd_If\n');
+        delete settings['format.assignmentAlignColumn'];
     });
 
     it('honours language-scoped settings', () => {

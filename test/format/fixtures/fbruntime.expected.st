@@ -46,38 +46,38 @@ VAR_TEMP
 END_VAR
 
 //Populate Temporaries
-tbRestart  := gSystem.bRestart();
-tltNow     := LTime();
-tltRuntime := tltNow - sltNow;
+tbRestart                               := gSystem.bRestart();
+tltNow                                  := LTime();
+tltRuntime                              := tltNow - sltNow;
 
 //Handle restart and reset
 If (ibReset Or tbRestart) Then
-    sltRuntimeMax := LTime#0s;
-    sltRuntimeMin := LTime#1d;
-    sltNow        := tltNow;
+    sltRuntimeMax                       := LTime#0s;
+    sltRuntimeMin                       := LTime#1d;
+    sltNow                              := tltNow;
     Return;
 End_If;
 
 //Handle start and end call
 If ibStart Then
-    sltNow           := tltNow;
-    qltRuntime       := Ltime#0s;
-    qliRuntimeJitter := 0;
+    sltNow                              := tltNow;
+    qltRuntime                          := Ltime#0s;
+    qliRuntimeJitter                    := 0;
     Return;
 End_If;
 
 //Handle Min/Max cycle time
 If (tltRuntime > sltRuntimeMax) Then
-    sltRuntimeMax := tltRuntime;
+    sltRuntimeMax                       := tltRuntime;
 ElsIf (tltRuntime < sltRuntimeMin) Then
-    sltRuntimeMin := tltRuntime;
+    sltRuntimeMin                       := tltRuntime;
 End_If;
-tliJitter := (LTime_To_LInt(tltRuntime) - sliJitter) / cliNsPerUs;
-sliJitter := LTime_To_LInt(tltRuntime);
+tliJitter                               := (LTime_To_LInt(tltRuntime) - sliJitter) / cliNsPerUs;
+sliJitter                               := LTime_To_LInt(tltRuntime);
 
 //Write to outputs
-qltRuntime       := tltRuntime;
-qliRuntimeJitter := tliJitter; // jitter
-qltRuntimeMax    := sltRuntimeMax;
-qltRuntimeMin    := sltRuntimeMin;
+qltRuntime                              := tltRuntime;
+qliRuntimeJitter                        := tliJitter; // jitter
+qltRuntimeMax                           := sltRuntimeMax;
+qltRuntimeMin                           := sltRuntimeMin;
 END_FUNCTION_BLOCK

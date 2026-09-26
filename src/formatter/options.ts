@@ -38,7 +38,7 @@ export const DEFAULT_FORMAT_OPTIONS: FormatOptions = {
     indentPouBody: false,
     splitStatements: true,
     alignAssignments: true,
-    assignmentAlignColumn: 0,
+    assignmentAlignColumn: 41,
     assignmentMaxColumn: 60,
     alignDeclarations: true,
     declarationMaxColumn: 48,

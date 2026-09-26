@@ -39,7 +39,7 @@ Run **Format Document** (`Shift+Alt+F`), **Format Selection**, or enable `editor
 | CASE labels are indented one level and their statements two levels. The code after a label moves to its own line; a trailing comment stays on the label line | 4.1.1.2.4, 4.1.1.2.12 |
 | One statement per line. `IF a THEN b := 1; END_IF` becomes three lines | 4.1.1.2.1 |
 | Code keywords `If / ElsIf / End_If`, `And / Not` (or lower case). Declaration keywords `VAR_INPUT / END_VAR` UPPER. Data types `Bool / LReal / LTime`. Built-ins `Abs / Sqrt / LTime_To_LInt` | 4.1.1.2, 4.1.1.2.2 |
-| `:=` vertically aligned in runs of consecutive assignments (or at a fixed column) | 4.1.1.2.1 |
+| `:=` of every assignment statement vertically aligned on one column (41 by default, as in the guideline's examples). Named call arguments align within their call | 4.1.1.2.1 |
 | Declarations laid out in three columns: name, `: Type := init;`, `//comment` | 4.1.1.2.2 |
 | Exactly one blank line between VAR sections. Optional reordering into VAR CONSTANT, VAR_INPUT, VAR_OUTPUT, VAR_IN_OUT, VAR, VAR_TEMP | 4.1.1.2.2 |
 | Multi-line calls with named arguments are laid out like the guideline's examples (below) | 4.1.1.2.6, 4.1.1.2.7 |
@@ -70,8 +70,8 @@ ilrSubstituteValue := 0.0);          ─►       ilrInput           := trY,
 | `indentPouBody` | `false` | Indent VAR sections and code inside a POU |
 | `splitStatements` | `true` | One statement per line |
 | `alignAssignments` | `true` | Align `:=` in consecutive assignments |
-| `assignmentAlignColumn` | `0` | `0` aligns per run; a column number aligns all `:=` to that column |
-| `assignmentMaxColumn` | `60` | Lines whose `:=` would land beyond this column are left unaligned |
+| `assignmentAlignColumn` | `41` | Column for `:=` in assignment statements; a left-hand side that doesn't fit gets one space. `0` aligns per run of consecutive assignments instead |
+| `assignmentMaxColumn` | `60` | With per-run alignment (`assignmentAlignColumn: 0`): lines whose `:=` would land beyond this column are left unaligned |
 | `alignDeclarations` | `true` | Three-column declaration layout |
 | `declarationMaxColumn` | `48` | Maximum column for the `:` of declarations |
 | `alignTrailingComments` | `true` | Align trailing comments in aligned groups |
@@ -133,6 +133,10 @@ More lint settings:
 
 - The formatter is layout-based, not a full compiler front end. On unusual constructs it falls back to leaving lines as they are, and the safety net guarantees the code itself is unchanged.
 - TwinCAT `.TcPOU` XML files and CODESYS PLCopenXML exports are not supported. Use plain-text `.st` exports.
+
+## License
+
+[MIT](LICENSE)
 
 ## Development
 
