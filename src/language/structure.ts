@@ -113,7 +113,7 @@ export function parseStructure(tokens: Token[], dialect: Dialect): Block {
             continue;
         }
 
-        if (POU_HEADS.has(u)) {
+        if (POU_HEADS.has(u) && (!prev || prev.line < t.line || (prev.kind === 'op' && prev.text === ';') || upper(prev).startsWith('END_'))) {
             const block = open({ kind: 'pou', keyword: u, start: t });
             let j = k + 1;
             while (ACCESS_MODIFIERS.has(upper(code[j]))) {

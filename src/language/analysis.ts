@@ -29,10 +29,14 @@ export function isVarKeyword(u: string): boolean {
 export interface Analysis {
     /** Indices of code tokens (no whitespace, comments or pragmas). */
     code: number[];
+    /** Token index -> position in `code`, or -1 for non-code tokens. */
+    codePos: Int32Array;
     /** Token index -> inside a declaration context (VAR / TYPE / STRUCT block or POU header line). */
     inDecl: boolean[];
     /** Token indices of `:` operators that terminate a CASE label. */
     labelColons: Set<number>;
+    /** Token indices of the first token of a CASE label. */
+    labelStarts: Set<number>;
     /** Token indices of `OF` that open a CASE body. */
     caseOfs: Set<number>;
     /** Token index -> the token follows a `.` (member access), so it is never a keyword. */
@@ -42,14 +46,17 @@ export interface Analysis {
 export function analyze(tokens: Token[], dialect: Dialect): Analysis {
     const sets = keywordSets(dialect.id);
     const code: number[] = [];
+    const codePos = new Int32Array(tokens.length).fill(-1);
     tokens.forEach((t, i) => {
         if (!isNonCode(t)) {
+            codePos[i] = code.length;
             code.push(i);
         }
     });
     const inDecl = new Array<boolean>(tokens.length).fill(false);
     const afterDot = new Array<boolean>(tokens.length).fill(false);
     const labelColons = new Set<number>();
+    const labelStarts = new Set<number>();
     const caseOfs = new Set<number>();
 
     let declDepth = 0;
@@ -76,7 +83,7 @@ export function analyze(tokens: Token[], dialect: Dialect): Analysis {
         } else if (u === 'END_VAR' || u === 'END_TYPE' || u === 'END_STRUCT' || u === 'END_UNION') {
             inDecl[i] = true;
             declDepth = Math.max(0, declDepth - 1);
-        } else if (POU_HEADS.has(u)) {
+        } else if (POU_HEADS.has(u) && isPouHead(prev, t)) {
             headerLine = t.line;
             inDecl[i] = true;
         } else {
@@ -93,6 +100,7 @@ export function analyze(tokens: Token[], dialect: Dialect): Analysis {
             const colon = findLabelColon(tokens, code, ci, sets.control);
             if (colon >= 0) {
                 labelColons.add(code[colon]);
+                labelStarts.add(i);
                 ci = colon;
                 stmtStart = true;
                 continue;
@@ -122,7 +130,11 @@ export function analyze(tokens: Token[], dialect: Dialect): Analysis {
             stmtStart = true;
         }
     }
-    return { code, inDecl, labelColons, caseOfs, afterDot };
+    return { code, codePos, inDecl, labelColons, labelStarts, caseOfs, afterDot };
+}
+
+function isPouHead(prev: Token | undefined, t: Token): boolean {
+    return !prev || prev.line < t.line || (prev.kind === 'op' && prev.text === ';') || (prev.kind === 'word' && prev.text.toUpperCase().startsWith('END_'));
 }
 
 function isLabelStart(t: Token, u: string): boolean {
@@ -151,4 +163,36 @@ function findLabelColon(tokens: Token[], code: number[], ci: number, control: Se
         }
     }
     return -1;
+}
+
+/** Next / previous code token relative to token index `i`. */
+export function nextCode(tokens: Token[], a: Analysis, i: number): Token | undefined {
+    for (let j = i + 1; j < tokens.length; j++) {
+        if (a.codePos[j] >= 0) {
+            return tokens[j];
+        }
+    }
+    return undefined;
+}
+
+export function prevCode(tokens: Token[], a: Analysis, i: number): Token | undefined {
+    for (let j = i - 1; j >= 0; j--) {
+        if (a.codePos[j] >= 0) {
+            return tokens[j];
+        }
+    }
+    return undefined;
+}
+
+/**
+ * True if token `i` is a POU keyword (FUNCTION_BLOCK, METHOD, ...) in header position:
+ * the first code token on its line or following `;` / an END_ keyword.
+ */
+export function isPouHeadAt(tokens: Token[], a: Analysis, i: number): boolean {
+    const t = tokens[i];
+    if (t.kind !== 'word' || !POU_HEADS.has(t.text.toUpperCase()) || a.afterDot[i]) {
+        return false;
+    }
+    const p = a.codePos[i] > 0 ? tokens[a.code[a.codePos[i] - 1]] : undefined;
+    return !p || p.line < t.line || (p.kind === 'op' && p.text === ';') || (p.kind === 'word' && p.text.toUpperCase().startsWith('END_'));
 }

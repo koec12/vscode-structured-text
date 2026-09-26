@@ -1,0 +1,30 @@
+FUNCTION_BLOCK "fbMotor"
+TITLE = Motor's control block
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : Olav
+VERSION : 0.1
+   VAR_INPUT 
+      ixStart : Bool;   // Start command
+      ixStop : Bool;   // Stop
+      iltDelay : LTime := LT#5s;
+   END_VAR
+   VAR 
+      sData : Struct
+         iCount : Int;
+         bDone : Bool;
+      END_STRUCT;
+      sTimer {InstructionName := 'TON_TIME'; LibVersion := '1.0'} : TON_TIME;
+   END_VAR
+   VAR_TEMP 
+      tbStart : Bool;
+   END_VAR
+BEGIN
+REGION Handle IF (inputs)
+   #tbStart := #ixStart AND NOT #ixStop;
+   IF #tbStart THEN #sData.iCount := #sData.iCount + 1; END_IF;
+   #sTimer(IN := #tbStart,
+           PT := #iltDelay);
+   "gDb".bRunning := #sTimer.Q;
+   CASE #sData.iCount OF 1: #sData.bDone := TRUE; ELSE ; END_CASE;
+END_REGION
+END_FUNCTION_BLOCK

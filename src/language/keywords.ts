@@ -29,6 +29,7 @@ export const POU_KEYWORDS = [
     'RESOURCE', 'END_RESOURCE',
     'TYPE', 'END_TYPE',
     'STRUCT', 'END_STRUCT',
+    'BEGIN',
 ];
 export const ST_POU_KEYWORDS = [
     'METHOD', 'END_METHOD',
@@ -41,7 +42,6 @@ export const ST_POU_KEYWORDS = [
 export const SCL_POU_KEYWORDS = [
     'ORGANIZATION_BLOCK', 'END_ORGANIZATION_BLOCK',
     'DATA_BLOCK', 'END_DATA_BLOCK',
-    'BEGIN',
     'REGION', 'END_REGION',
 ];
 

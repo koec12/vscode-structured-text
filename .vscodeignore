@@ -9,5 +9,5 @@ samples/**
 **/*.ts
 tsconfig.json
 esbuild.mjs
-vitest.config.ts
+vitest.config.mts
 .gitignore
