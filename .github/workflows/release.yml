@@ -1,0 +1,68 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build and release .vsix
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Grammar tests
+        run: npm run test:grammar
+
+      - name: Package extension
+        id: package
+        run: |
+          version=$(node -p "require('./package.json').version")
+          tag="v${version}-build.${GITHUB_RUN_NUMBER}"
+          file="vscode-structured-text-${version}-build.${GITHUB_RUN_NUMBER}.vsix"
+          # vscode:prepublish runs `npm run build` (grammars, typecheck, bundle)
+          npx vsce package --out "$file"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "file=$file" >> "$GITHUB_OUTPUT"
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.package.outputs.tag }}
+          FILE: ${{ steps.package.outputs.file }}
+        run: |
+          gh release create "$TAG" "$FILE" \
+            --target "$GITHUB_SHA" \
+            --title "$TAG" \
+            --generate-notes
+
+      - name: Summary
+        env:
+          TAG: ${{ steps.package.outputs.tag }}
+          FILE: ${{ steps.package.outputs.file }}
+        run: |
+          {
+            echo "### Released \`$TAG\`"
+            echo
+            echo "Attached \`$FILE\` to https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG}"
+          } >> "$GITHUB_STEP_SUMMARY"
