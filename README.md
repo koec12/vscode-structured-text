@@ -8,6 +8,9 @@ Language support for PLC programming in **IEC 61131-3 Structured Text** (CODESYS
 - **Outline, breadcrumbs and folding**
 - **Snippets** for file headers, POU skeletons and common patterns
 
+> [!WARNING]
+> This extension is 100% vibe coded. It probably isn't ready to be used in production, so review its output (especially the formatter's) before relying on it.
+
 ## Installation
 
 The extension is not on the Marketplace. Install it from a `.vsix` file:
