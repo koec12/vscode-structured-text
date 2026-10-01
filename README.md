@@ -8,6 +8,22 @@ Language support for PLC programming in **IEC 61131-3 Structured Text** (CODESYS
 - **Outline, breadcrumbs and folding**
 - **Snippets** for file headers, POU skeletons and common patterns
 
+## Installation
+
+The extension is not on the Marketplace. Install it from a `.vsix` file:
+
+1. Download the `.vsix` file from the latest release on the [Releases page](https://github.com/koec12/vscode-structured-text/releases/latest). Every merge to `main` publishes a release, tagged `v<version>-build.<number>` (for example `v0.1.0-build.1`).
+2. In VS Code, open the Extensions view (`Ctrl+Shift+X`), click the `...` menu at the top and choose **Install from VSIX...**. Select the downloaded file.
+3. Reload the window if VS Code asks for it.
+
+Or install it from a terminal:
+
+```bash
+code --install-extension vscode-structured-text-0.1.0-build.1.vsix
+```
+
+To update, install the newer `.vsix` the same way. VS Code 1.85 or later is required.
+
 ## Syntax highlighting
 
 | | ST (`iec-st`) | SCL (`siemens-scl`) |
