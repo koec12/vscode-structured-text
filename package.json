@@ -2,7 +2,7 @@
   "name": "vscode-structured-text",
   "displayName": "Structured Text & SCL",
   "description": "Syntax highlighting, formatter, lint, outline, folding and snippets for IEC 61131-3 Structured Text (CODESYS / TwinCAT) and Siemens SCL.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "koec12",
   "repository": {
     "type": "git",
